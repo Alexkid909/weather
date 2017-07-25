@@ -1,4 +1,4 @@
-app.factory('currentWeather',[
+angular.module('Weather').factory('currentWeatherFactory',[
 		'$http',
 		function($http) {
 			var currentWeather = {};

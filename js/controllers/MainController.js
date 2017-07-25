@@ -1,25 +1,26 @@
-app.controller('MainController',[
-		'currentWeather',
-		function(currentWeather) {
-			var confirmApiResponse = function() {
-				var counter = 0;
-				var apiResponseCheck = setInterval(function() {
-					counter++;
-					console.log(counter);
-					if (counter > 10) {
-						console.log("Timed out with no response")
-						clearInterval(apiResponseCheck);
-					} else if(currentWeather.data) {
-						console.log(currentWeather.data);
-						clearInterval(apiResponseCheck);						
-					} else if (currentWeather.err) {
-						console.log(currentWeather.err);
-						clearInterval(apiResponseCheck);
-					} else {
-						console.log("No response yet");
-					}
-				},100);
+angular.module('Weather').controller('MainController',[
+		'currentWeatherFactory',
+		'forecastWeatherFactory',
+		'searchFactory',
+		'$scope',
+		function(currentWeatherFactory,forecastWeatherFactory,searchFactory,$scope) {
+
+			$scope.getForecastWeather = function() {
+				return forecastWeatherFactory.data;
 			};
-			confirmApiResponse();
+			// $scope.getSearch = function() {
+			// 	return searchFactory.data;
+			// };
+			$scope.$watch($scope.getForecastWeather,function(newValue,oldValue) {
+				if (newValue) {					
+					$scope.forecastWeather = newValue.forecast;
+					$scope.currentWeather = newValue.current;
+					$scope.location = newValue.location;
+					// console.log($scope.currentWeather);
+				};
+			});	
+			// $scope.$watch($scope.getSearch,function(newValue,oldValue) {
+			// 	console.log(newValue);
+			// });						
 		}
 	]);
