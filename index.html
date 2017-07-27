@@ -3,20 +3,35 @@
 <head>
 	<title>Weather App</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<script type="text/javascript" src="js/vendor/angular.js"></script>
+	<script type="text/javascript" src="js/vendor/angular.min.js"></script>
+	<script type="text/javascript" src="js/vendor/angular-route.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
 </head>
 <body ng-app="Weather">
-
-	<div ng-controller="MainController">
-		<h1>Current Weather</h1>
-		<weather-summary 
-			period-denominator='day'
-			last-updated="currentWeather.last_updated"
-			condition="currentWeather.condition.text"
-			temp-current="currentWeather.temp_c" 
-			wind-speed="currentWeather.wind_mph"
-			wind-direction="currentWeather.wind_dir"
-		></weather-summary>
+	<div class="background-container">
+		<div class="overlay"></div>
+	</div>
+	<div class="main" ng-controller="MainController">
+		<div class="main-container">
+			<h1>Current Weather</h1>
+			<div class="daily-summaries">
+				<a href="#/weather_day/{{$index}}/" ng-repeat="forecastDay in forecastWeather.forecastDays">
+					<weather-summary
+						class="daily-summary"
+						periods="['dayName','dayWithSuffix']"
+						date="forecastDay.date"
+						temp-current="forecastDay.day.temp_c"
+						wind-speed="forecastDay.day.maxwind_mph"
+						wind-direction="forecastDay.day.wind_dir"
+						wind-degree="forecastDay.day.wind_degree"
+						icon-path="forecastDay.day.condition.icon"
+						temp-high="forecastDay.day.maxtemp_c"
+						temp-low="forecastDay.day.mintemp_c" 
+					></weather-summary>
+				</a>
+			</div>
+			<div ng-view></div>
+		</div>
 	</div>
 
 
