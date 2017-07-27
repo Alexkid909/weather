@@ -1,0 +1,12 @@
+<weather-summary 
+	class="main-summary"
+	periods="['dayName','dayWithSuffix']"
+	date="currentWeather.last_updated"
+	condition="currentWeather.condition.text"
+	temp-current="currentWeather.temp_c"			temp-high="forecastWeather.forecastDays[0].day.maxtemp_c" 
+	temp-low="forecastWeather.forecastDays[0].day.mintemp_c" 
+	wind-speed="currentWeather.wind_mph"
+	wind-direction="currentWeather.wind_dir"
+	wind-degree="currentWeather.wind_degree"
+	icon-path="currentWeather.condition.icon"
+></weather-summary>

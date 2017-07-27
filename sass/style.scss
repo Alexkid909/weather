@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css?family=Dosis');
+@import url('bootstrap.min.css');
+@import "main-summary";
+@import "daily-summary";
+
+$start: 1;
+$end: 10;
+
+html,body {
+	font-size: 1vh;
+	line-height: 1;
+	
+}
+
+body {
+	color: white;
+	font-family: 'Dosis', sans-serif;
+	width: 100vw;
+
+}
+
+div.background-container {
+	height: 100%;
+	width: 100%;
+	background-image: url("../images/backgrounds/sunshine_1920.jpg");
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	position: fixed;
+	z-index: -1;
+	.overlay {
+		position: relative;
+		height: 100%;
+		width: 100%;
+		background-color: rgba(0,0,0,0.7); 
+	}
+}
+
+.main {
+	.main-container {
+		margin: 0 2.5rem;
+		overflow-x: hidden;
+	}
+	width: 100%;
+	weather-summary {
+		position: relative;
+		color: white;
+		.weather-summary-wrapper {
+			padding: 1rem;
+			// border-bottom: 2px solid rgb(255,255,255);
+			margin-bottom: 3rem;
+			background-color: rgba(200,200,200,0.25);
+			.period-container {
+				span {
+					// margin-right: 1rem;
+					&.dayWithSuffix {
+						font-size: 0.5em;
+						vertical-align: top;
+					}
+				}
+			}
+			.temp-container {
+				margin: auto 0;
+				span {
+					vertical-align: top;
+				}
+				.degree-c-symbol {
+					font-size: 0.5em;
+				}
+			}
+			.wind-container {
+				text-align: center;
+				.wind-mph {
+					font-size: 0.5em;
+					vertical-align: top;
+				}
+				.wind-direction-arrow {
+					width: 0.5em;
+					height: 0.5em;
+				}
+			}
+		} 
+	}
+	.daily-summaries {
+		position: relative;
+		display: grid;
+		width: 200%;
+		grid-template-columns: repeat(10, 9.5%);
+		grid-template-rows: repeat(1, 1fr);
+		grid-column-gap: 0.6%;
+		grid-row-gap: 0;
+		grid-auto-columns: minmax(auto, auto);	
+		grid-auto-rows: minmax(auto, auto);		
+		overflow-x: hidden;
+		font-size: 1rem;
+		weather-summary.daily-summary {
+			.weather-summary-wrapper {
+
+				width: 100%;
+				display: inline-block;
+				&>div {
+					margin-bottom: 0.25em;
+				}
+				.temp-container, .wind-container {
+					font-size: 0.8em;					
+				}
+				.temp-container {
+					.high-temp-wrapper, .low-temp-wrapper {
+						display: grid;
+						grid-template-columns: repeat(3, 1fr);
+						grid-auto-rows: minmax(auto, auto);
+						&>span {
+							grid-row: 1/1;
+							margin: auto 0;
+						}
+						.glyphicon {
+							grid-column: 1/2;
+							font-size: 0.6em;
+							text-align: center;
+							vertical-align: middle;
+						}
+						.high-temp, .low-temp {
+							grid-column: 2/4;
+						}
+					} 						
+				}
+			}
+		}
+	}
+}
