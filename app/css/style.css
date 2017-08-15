@@ -1,0 +1,184 @@
+@import url("https://fonts.googleapis.com/css?family=Dosis");
+@import url("bootstrap.min.css");
+html, body {
+  font-size: 1vh;
+  line-height: 1; }
+
+body {
+  color: white;
+  font-family: 'Dosis', sans-serif;
+  width: 100vw; }
+
+div.background-container {
+  height: 100%;
+  width: 100%;
+  background-image: url("../images/backgrounds/sunshine_1920.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: fixed;
+  z-index: -1; }
+  div.background-container .overlay {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.7); }
+
+.main {
+  width: 100%; }
+  .main .main-container {
+    margin: 0 2.5rem;
+    overflow-x: hidden; }
+  .main .main-summary .forecast-summary .high-temp-wrapper, .main .main-summary .forecast-summary .low-temp-wrapper, .main .daily-summaries .daily-summary .high-temp-wrapper, .main .daily-summaries .daily-summary .low-temp-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(auto, auto); }
+    .main .main-summary .forecast-summary .high-temp-wrapper > span, .main .main-summary .forecast-summary .low-temp-wrapper > span, .main .daily-summaries .daily-summary .high-temp-wrapper > span, .main .daily-summaries .daily-summary .low-temp-wrapper > span {
+      grid-row: 1/1;
+      margin: auto 0; }
+    .main .main-summary .forecast-summary .high-temp-wrapper .glyphicon, .main .main-summary .forecast-summary .low-temp-wrapper .glyphicon, .main .daily-summaries .daily-summary .high-temp-wrapper .glyphicon, .main .daily-summaries .daily-summary .low-temp-wrapper .glyphicon {
+      grid-column: 1;
+      font-size: 0.4em;
+      vertical-align: middle; }
+    .main .main-summary .forecast-summary .high-temp-wrapper .high-temp, .main .main-summary .forecast-summary .high-temp-wrapper .low-temp, .main .main-summary .forecast-summary .low-temp-wrapper .high-temp, .main .main-summary .forecast-summary .low-temp-wrapper .low-temp, .main .daily-summaries .daily-summary .high-temp-wrapper .high-temp, .main .daily-summaries .daily-summary .high-temp-wrapper .low-temp, .main .daily-summaries .daily-summary .low-temp-wrapper .high-temp, .main .daily-summaries .daily-summary .low-temp-wrapper .low-temp {
+      grid-column: 2/5; }
+  .main weather-summary {
+    position: relative;
+    color: white; }
+    .main weather-summary .weather-summary-wrapper {
+      margin-bottom: 1.5rem;
+      background-color: rgba(200, 200, 200, 0.25);
+      padding: 2rem 0.125em;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-column-gap: 1rem;
+      grid-row-gap: 1rem;
+      grid-auto-rows: minmax(auto, auto); }
+      .main weather-summary .weather-summary-wrapper > div {
+        padding: 0;
+        text-align: center; }
+      .main weather-summary .weather-summary-wrapper .period-container, .main weather-summary .weather-summary-wrapper .condition-container {
+        grid-column: 1/3; }
+      .main weather-summary .weather-summary-wrapper .temp-container, .main weather-summary .weather-summary-wrapper .wind-container {
+        grid-column: 3/6; }
+      .main weather-summary .weather-summary-wrapper .condition-container {
+        grid-row: 2/4;
+        font-size: 7.5rem; }
+        .main weather-summary .weather-summary-wrapper .condition-container .condition-image-wrapper {
+          left: 0;
+          right: 0; }
+          .main weather-summary .weather-summary-wrapper .condition-container .condition-image-wrapper .conditionImg {
+            width: 100%;
+            height: 100%; }
+          .main weather-summary .weather-summary-wrapper .condition-container .condition-image-wrapper .condition {
+            font-size: 0.3em; }
+      .main weather-summary .weather-summary-wrapper .temp-container {
+        margin: 0 0 auto 0; }
+        .main weather-summary .weather-summary-wrapper .temp-container span {
+          vertical-align: top; }
+        .main weather-summary .weather-summary-wrapper .temp-container .high-temp, .main weather-summary .weather-summary-wrapper .temp-container .low-temp {
+          text-align: left; }
+        .main weather-summary .weather-summary-wrapper .temp-container .current-temp span.glyphicon, .main weather-summary .weather-summary-wrapper .temp-container .high-temp-wrapper span.glyphicon, .main weather-summary .weather-summary-wrapper .temp-container .low-temp-wrapper span.glyphicon {
+          display: block; }
+        .main weather-summary .weather-summary-wrapper .temp-container .current-temp span, .main weather-summary .weather-summary-wrapper .temp-container .high-temp-wrapper span, .main weather-summary .weather-summary-wrapper .temp-container .low-temp-wrapper span {
+          display: inline-block; }
+        .main weather-summary .weather-summary-wrapper .temp-container .high-temp-wrapper, .main weather-summary .weather-summary-wrapper .temp-container .low-temp-wrapper {
+          grid-column: 10/13;
+          margin: auto 0; }
+        .main weather-summary .weather-summary-wrapper .temp-container .high-temp-wrapper {
+          grid-row: 1/1; }
+          .main weather-summary .weather-summary-wrapper .temp-container .high-temp-wrapper > span {
+            vertical-align: bottom; }
+        .main weather-summary .weather-summary-wrapper .temp-container .low-temp-wrapper {
+          grid-row: 2/2; }
+          .main weather-summary .weather-summary-wrapper .temp-container .low-temp-wrapper > span {
+            vertical-align: top; }
+        .main weather-summary .weather-summary-wrapper .temp-container .degree-c-symbol {
+          font-size: 0.5em; }
+        .main weather-summary .weather-summary-wrapper .temp-container .glyphicon {
+          text-align: center; }
+      .main weather-summary .weather-summary-wrapper .wind-container {
+        grid-row: 3;
+        text-align: right;
+        font-size: 0.9em;
+        margin-top: 1.5rem; }
+        .main weather-summary .weather-summary-wrapper .wind-container .wind-direction {
+          font-size: 0.5em; }
+        .main weather-summary .weather-summary-wrapper .wind-container .wind-mph {
+          font-size: 0.5em;
+          vertical-align: top; }
+        .main weather-summary .weather-summary-wrapper .wind-container .wind-direction-arrow {
+          width: 0.5em;
+          height: 0.5em; }
+      .main weather-summary .weather-summary-wrapper .period-container span.dayWithSuffix {
+        font-size: 0.4em;
+        vertical-align: top; }
+    .main weather-summary.today-summary .weather-summary-wrapper .temp-container {
+      display: grid;
+      grid-row: 1/3;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      grid-column-gap: 1rem;
+      grid-row-gap: 0;
+      grid-auto-rows: minmax(auto, auto); }
+      .main weather-summary.today-summary .weather-summary-wrapper .temp-container .current-temp {
+        font-size: 6em;
+        grid-column: 1/10;
+        grid-row: 1/3;
+        text-align: right; }
+    .main weather-summary.forecast-summary .temp-container {
+      font-size: 1.2em;
+      grid-row: 1/3;
+      margin-left: 0.25em; }
+      .main weather-summary.forecast-summary .temp-container .high-temp, .main weather-summary.forecast-summary .temp-container .low-temp {
+        margin-left: 2rem; }
+      .main weather-summary.forecast-summary .temp-container .glyphicon {
+        text-align: right; }
+    .main weather-summary.hourly-summary {
+      font-size: 5rem; }
+      .main weather-summary.hourly-summary .weather-summary-wrapper {
+        grid-template-columns: repeat(4, 1fr);
+        grid-row-gap: 0;
+        padding-top: 0;
+        padding-bottom: 0; }
+        .main weather-summary.hourly-summary .weather-summary-wrapper > div {
+          margin: auto 0;
+          grid-row: 1; }
+        .main weather-summary.hourly-summary .weather-summary-wrapper .period-container {
+          grid-column: 1; }
+        .main weather-summary.hourly-summary .weather-summary-wrapper .condition-container {
+          grid-column: 2; }
+        .main weather-summary.hourly-summary .weather-summary-wrapper .temp-container {
+          grid-column: 3; }
+        .main weather-summary.hourly-summary .weather-summary-wrapper .wind-container {
+          grid-column: 4;
+          grid-row-gap: 0; }
+  .main .daily-summaries {
+    position: relative;
+    display: grid;
+    width: 200%;
+    grid-template-columns: repeat(10, 9.5%);
+    grid-template-rows: repeat(1, 1fr);
+    grid-column-gap: 0.6%;
+    grid-row-gap: 0;
+    grid-auto-columns: minmax(auto, auto);
+    grid-auto-rows: minmax(auto, auto);
+    overflow-x: hidden;
+    font-size: 1rem; }
+    .main .daily-summaries weather-summary.daily-summary .weather-summary-wrapper {
+      font-size: 3.25rem;
+      width: 100%;
+      display: inline-block; }
+      .main .daily-summaries weather-summary.daily-summary .weather-summary-wrapper .temp-container, .main .daily-summaries weather-summary.daily-summary .weather-summary-wrapper .wind-container {
+        font-size: 0.9em; }
+      .main .daily-summaries weather-summary.daily-summary .weather-summary-wrapper .wind-container {
+        text-align: center; }
+  .main .main-summary .weather-summary-wrapper {
+    font-size: 7.5rem; }
+  .main .main-summary .temp-container {
+    font-size: 2.5rem; }
+  .main .main-summary .wind-container {
+    padding-right: 1rem; }
+
+/*# sourceMappingURL=style.css.map */

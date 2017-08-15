@@ -1,0 +1,35 @@
+<div class="weather-summary-wrapper" ng-click="setMainSummaryDay(index)">
+	<div class="period-container">
+ 		<span ng-repeat="period in periods" class="{{period.periodName}}">{{period.periodValue}} </span>
+	</div>
+	<div class="condition-container">
+		<div class="condition-image-wrapper">			
+			<img class="conditionImg" ng-src="http:{{iconPath}}">
+			<div class="condition">{{condition}}</div>		
+		</div>
+	</div>
+	<div class="temp-container">
+		<span ng-show="tempCurrent" class="current-temp">{{tempCurrent}}<span class="degree-c-symbol">&#176c</span>
+		</span>
+		<div ng-show="tempHigh" class="high-temp-wrapper">
+			<span class="glyphicon glyphicon-menu-up"></span>
+			<span class="high-temp">{{tempHigh}}<span class="degree-c-symbol">&#176c</span></span>
+		</div>
+
+		<div ng-show="tempLow" class="low-temp-wrapper">
+			<span class="low-temp">{{tempLow}}<span class="degree-c-symbol">&#176c</span></span>
+			<span class="glyphicon glyphicon-menu-down"></span>
+		</div>
+
+	</div>
+	<div class="wind-container">		
+		<span ng-show="windSpeed" class="wind-speed">{{windSpeed}}<span class="wind-mph">mph</span>
+		</span>
+		<span ng-show="windSpeedMax" class="wind-speed-max">{{windSpeedMax}}<span class="wind-mph">mph</span>
+		</span>
+		<span ng-show="windSpeedMin" class="wind-speed-min">{{windSpeedMin}}<span class="wind-mph">mph</span>
+		</span>				
+		<span class="wind-direction">{{windDirection}}</span>
+		<img ng-show="windDegree" ng-src="images/icons/up-arrow.png" class="wind-direction-arrow" style="transform: rotate({{windDegree}}deg)"></span>	
+	</div>
+</div>

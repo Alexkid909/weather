@@ -1,0 +1,25 @@
+<div class="main-summary">
+	<weather-summary
+		class="forecast-summary"
+		periods="['dayName','dayWithSuffix']"
+		date="forecastWeather.date"
+		condition="forecastWeather.day.condition.text"
+		temp-high="forecastWeather.day.maxtemp_c" 
+		temp-low="forecastWeather.day.mintemp_c" 
+		wind-speed="forecastWeather.day.maxwind_mph"
+		icon-path="forecastWeather.day.condition.icon"
+	></weather-summary>
+</div>
+<div ng-repeat="hr in forecastWeather.hour">
+	<weather-summary
+	class="hourly-summary"
+	periods="['time']"
+	date="hr.time"	
+	hour="hr.time"
+	temp-current="hr.temp_c" 
+	wind-speed="hr.wind_mph"
+	wind-direction="hr.wind_dir"
+	wind-degree="hr.wind_degree"	
+	icon-path="hr.condition.icon"
+	></weather-summary>
+</div>
