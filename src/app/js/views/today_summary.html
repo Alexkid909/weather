@@ -1,0 +1,33 @@
+<div class="main-summary">
+	<span>{{currentWeather.local_time_rfc822}}</span>
+	<weather-summary
+		class="today-summary"
+		periods="[{'name':'now','value': 'Now'}]"
+		date="currentWeather.local_epoch"
+		condition="currentWeather.weather"
+		temp-current="currentWeather.temp_c"
+		temp-high="forecastWeather.high.celsius"
+		temp-low="forecastWeather.low.celsius"
+		wind-speed="currentWeather.wind_mph"
+		wind-direction="currentWeather.wind_dir"
+		wind-degree="currentWeather.wind_degrees"
+		icon-path="currentWeather.icon_url"
+		time-zone="location.local_tz_long"
+	></weather-summary>
+</div>
+<!--<span>{{forecastWeather.hour}}</span>-->
+<div ng-repeat="hr in todayForecast.hour">
+ 	<!--<span>{{hr}}</span>-->
+	<weather-summary
+	class="hourly-summary"
+	periods="[{'name':'hour', 'value': hr.FCTTIME.hour + ':' + hr.FCTTIME.min}]"
+	date="hr.FCTTIME"
+	time-zone="location.tz_long"
+	temp-current="hr.temp.metric"
+	wind-speed="hr.wspd.english"
+	wind-direction="hr.wdir.dir"
+	wind-degree="hr.wdir.degrees"
+	icon-path="hr.icon_url"
+	time-zone="location."
+	></weather-summary>
+</div>

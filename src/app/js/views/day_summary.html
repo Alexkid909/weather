@@ -1,0 +1,22 @@
+<div class="main-summary">
+	<weather-summary
+		class="forecast-summary"
+		periods="[{'name':'dayName', 'value': dayForecast.date.weekday_short}, {'name': 'dayWithSuffix', 'value': appendDaySuffix(dayForecast.date.day)}]"
+		condition="dayForecast.conditions"
+		temp-high="dayForecast.high.celsius"
+		temp-low="dayForecast.low.celsius"
+		wind-speed="dayForecast.maxwind.mph"
+		icon-path="dayForecast.icon_url"
+	></weather-summary>
+</div>
+<div ng-repeat="hr in dayForecast.hour">
+	<weather-summary
+	class="hourly-summary"
+	periods="[{'name':'hour', 'value': hr.FCTTIME.hour + ':' + hr.FCTTIME.min}]"	time-zone="location.tz_long"
+	temp-current="hr.temp.metric"
+	wind-speed="hr.wspd.english"
+	wind-direction="hr.wdir.dir"
+	wind-degree="hr.wdir.degrees"
+	icon-path="hr.icon_url"
+	></weather-summary>
+</div>
