@@ -2,7 +2,7 @@
     '<input class="text" type="text" name="" placeholder="Type a location" ng-model="searchTerm">'
 </div>
 <div>
-    <ul ng-repeat="location in searchResults">
-        <li>{{location.name}}</li>
+    <ul ng-repeat="location in searchResults.RESULTS">
+        <li class="search-result" ng-click="selectLocation(location)">{{location.name}}</li>
     </ul>
 </div>

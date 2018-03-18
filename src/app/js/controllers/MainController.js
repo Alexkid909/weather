@@ -1,9 +1,10 @@
 angular.module('Weather').controller('MainController',[
 		'weather',
 		'$scope',
-		function(weather,$scope) {
+		'locationService',
+		function(weather,$scope, locationService) {
 			$scope.errors = [];
-			$scope.location = "London";
+			$scope.currentLocation = '';
 			$scope.weatherLocation;
 			$scope.forecastWeather;
             $scope.appendDaySuffix = function(dayNumber) {
@@ -11,31 +12,34 @@ angular.module('Weather').controller('MainController',[
                 var suffix = dayNumber > 3 ? suffixes[3] : suffixes[dayNumber - 1];
                 return dayNumber + suffix;
             };
+            function getCurrentLocation() {
+                locationService.getCurrentLocation().then(success => {
+                    debugger;
+                    locationService.geoLookup(success.l).then(success => {
+                    	const location = success.data.location;
+                    	$scope.currentLocation = `${location.city}, ${location.country === 'US' ? `${location.state} ` : `${location.country_name}`} `;
+                    	debugger;
+					})
+                }, error => {
+                    console.log(error);
+                    debugger;
+                });
+            }
 			function getForecast10Day() {
 				weather.getForecast10Day().then(success => {
 					$scope.forecastWeather = success.data.forecast.simpleforecast.forecastday;
-					console.log('forecastWeather', $scope.forecastWeather);
 				},error => {
 					$scope.errors = [];
 					$scope.errors.push(error);
 				});	
 			};
 			getForecast10Day();
-
-			// function getCurrentWeather() {
-             //    weather.getCurrentWeather()
-             //        .then(success => {
-             //            $scope.currentWeather = success.data.current_observation;
-             //            // console.log('current', $scope.currentWeather);
-             //        }, error => console.log(error));
-			// }
-			// getCurrentWeather();
-
-			// $scope.updateWeather = function() {
-			// 	debugger;
-			// 	weather.setLocation($scope.location);
-			// 	$scope.getWeather();
-			// }
+			getCurrentLocation();
+			$scope.$on('event: locationChange', function() {
+				console.log('updating MainController');
+				getForecast10Day();
+				getCurrentLocation();
+            });
 		}
 	]);
 

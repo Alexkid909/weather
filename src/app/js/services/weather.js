@@ -1,11 +1,11 @@
 angular.module('Weather').factory('weather',[
 	'$http',
 	'$q',
-	function WeatherFactory($http,$q) {
+	'locationService',
+	function WeatherFactory($http,$q, locationService) {
 		var baseUrl = 'http://api.wunderground.com/api';
 		var key = '86f57048d0dd410f';
-		var state = 'CA';
-		var location = "San_Francisco";
+		// var currentLocation = locationService.getCurrentLocation();
 		var responseFormat = '.json';
 		var getCall = function(url) {
             var deferred = $q.defer();
@@ -20,30 +20,35 @@ angular.module('Weather').factory('weather',[
 		var service = {
 			getHourly10Day: function() {
                 const resource = 'hourly10day';
-                const url = [baseUrl, key, resource, 'q', state, location].join('/') + responseFormat;
-				// console.log(url);
-				return getCall(url);
+                return locationService.getCurrentLocation().then(success => {
+                    const locationQueryString = success.l;
+                    const url = `${[baseUrl, key, resource].join('/')}${locationQueryString}${responseFormat}`;
+                    return getCall(url);
+                });
 			},
             getHourlyToday: function() {
                 const resource = 'hourly';
-                const url = [baseUrl, key, resource, 'q', state, location].join('/') + responseFormat;
-                // console.log(url);
-                return getCall(url);
+                return locationService.getCurrentLocation().then(success => {
+                    const locationQueryString = success.l;
+                    const url = `${[baseUrl, key, resource].join('/')}${locationQueryString}${responseFormat}`;
+                    return getCall(url);
+                });
             },
 			getForecast10Day: function() {
                 const resource = 'forecast10day';
-                const url = [baseUrl, key, resource, 'q', state, location].join('/') + responseFormat;
-                // console.log(url);
-                return getCall(url);
+                return locationService.getCurrentLocation().then(success => {
+                    const locationQueryString = success.l;
+                    const url = `${[baseUrl, key, resource].join('/')}${locationQueryString}${responseFormat}`;
+                    return getCall(url);
+                });
 			},
 			getCurrentWeather: function() {
                 const resource = 'conditions';
-                const url = [baseUrl, key, resource, 'q', state, location].join('/') + responseFormat;
-                // console.log(url);
-                return getCall(url);
-			},
-			setLocation: function(newLocation) {
-				location = newLocation;
+                return locationService.getCurrentLocation().then(success => {
+                    const locationQueryString = success.l;
+                    const url = `${[baseUrl, key, resource].join('/')}${locationQueryString}${responseFormat}`;
+                    return getCall(url);
+                });
 			}
 		};
 		return service;

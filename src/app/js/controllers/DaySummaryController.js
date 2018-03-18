@@ -12,20 +12,19 @@ angular.module('Weather')
                 var suffix = dayNumber > 3 ? suffixes[3] : suffixes[dayNumber - 1];
                 return dayNumber + suffix;
             };
-            console.log($scope);
 
-			function getLocation() {
-                locationService.geoLookup().then(success => {
-                    $scope.location = success.data.location;
-                },error => console.log(error));
-            }
-            getLocation();
+            // function getLocation() {
+            //     locationService.geoLookup().then(success => {
+            //         $scope.location = success.data.location;
+            //     },error => console.log(error));
+            // }
+            // getLocation();
 
 
 			function getForecast10Day(day) {
                 weather.getForecast10Day().then(function(success) {
                     $scope.dayForecast = success.data.forecast.simpleforecast.forecastday[day];
-                    console.log('dayForecast', $scope.dayForecast);
+                    getHourlyForecastForDay($routeParams.id)
                 },function(error) {
                     $scope.errors = [];
                     $scope.errors.push(error);
@@ -34,16 +33,20 @@ angular.module('Weather')
             getForecast10Day($routeParams.id);
 
 
-			function getHourlyForecastFoDay(day) {
+			function getHourlyForecastForDay(day) {
 			    const currentDay = new Date().getDate();
 			    weather.getHourly10Day().then(success => {
-                    if (! $scope.dayForecast) {
-                        debugger;
-                    }
                     $scope.dayForecast.hour = success.data.hourly_forecast.filter(hour => hour.FCTTIME.mday == currentDay + parseInt(day));
-                    console.log('dayForecast', $scope.dayForecast);
+                },function(error) {
+			        console.log(error)
                 });
             }
-            getHourlyForecastFoDay($routeParams.id)
+
+
+            $scope.$on('event: locationChange', function() {
+                console.log('updating DaySummaryController');
+                getForecast10Day($routeParams.id);
+            });
+
 		}
 ]);

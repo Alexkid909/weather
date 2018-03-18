@@ -78,7 +78,7 @@ gulp.task('compileSass', compileSass);
 
 function watchSrc() {
     gulp.watch(paths.src.HTML, copyHtmlToTmp);
-    gulp.watch(paths.src.SASS, copyPackageJson);
+    gulp.watch(paths.src.SASS, copySassToTmp);
     gulp.watch(paths.src.JS, copyJsToTmp);
     gulp.watch(paths.src.ASSETS, copyAssetsToTmp);
     gulp.watch(paths.src.NPM, copyPackageJson);

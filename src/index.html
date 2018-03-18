@@ -17,7 +17,7 @@
 				<location-search></location-search>
 			</form>
 			<h1>Current Weather</h1><h2>{{weatherLocation.name}}</h2>
-			<span class="location">Location: {{location}}</span>
+			<span class="location">Location: {{currentLocation}}</span>
 			<div class="daily-summaries">
 				<a href="#/weather_day/{{$index}}/" ng-repeat="forecastDay in forecastWeather">
 					<weather-summary

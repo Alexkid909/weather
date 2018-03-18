@@ -78,7 +78,12 @@ div.background-container {
 		}
 	}
 
-
+	location-search {
+		li.search-result {
+			font-size: 2rem;
+			list-style: none;
+		}
+	}
 	weather-summary {
 		position: relative;
 		color: white;
