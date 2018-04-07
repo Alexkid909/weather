@@ -7,6 +7,7 @@
 		temp-low="dayForecast.low.celsius"
 		wind-speed="dayForecast.maxwind.mph"
 		icon-path="dayForecast.icon_url"
+		icon="dayForecast.icon"
 	></weather-summary>
 </div>
 <div ng-repeat="hr in dayForecast.hour">
@@ -18,5 +19,6 @@
 	wind-direction="hr.wdir.dir"
 	wind-degree="hr.wdir.degrees"
 	icon-path="hr.icon_url"
+	icon="hr.icon"
 	></weather-summary>
 </div>

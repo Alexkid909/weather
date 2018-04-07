@@ -19,12 +19,12 @@ angular.module('Weather').directive('locationSearch', [
                     } else if (newValue !== oldValue) {
                         locationService.search(newValue)
                             .then(function(success) {
-                                $scope.searchResults = success.data;
+                                $scope.searchResults = success.data.RESULTS.slice(0,5);
                             },function(error) {
                                 console.log(error);
                             });
                     }
-                })
+                });
                 $scope.selectLocation = function(location) {
                     locationService.setCurrentLocation(location);
                     resetSearchResults();

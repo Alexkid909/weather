@@ -3,6 +3,7 @@
 <head>
 	<title>Weather App</title>
 	<link rel="stylesheet" type="text/css" href="app/css/style.css">
+	<link rel="stylesheet" href="./node_modules/font-awesome/css/font-awesome.min.css">
 	<script type="text/javascript" src="./node_modules/angular/angular.min.js"></script>
 	<script type="text/javascript" src="./node_modules/angular-route/angular-route.min.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1">	
@@ -13,9 +14,9 @@
 	</div>
 	<div class="main" ng-controller="MainController">
 		<div class="main-container">
-			<form>
+			<div class="search-container">
 				<location-search></location-search>
-			</form>
+			</div>
 			<h1>Current Weather</h1><h2>{{weatherLocation.name}}</h2>
 			<span class="location">Location: {{currentLocation}}</span>
 			<div class="daily-summaries">
@@ -26,8 +27,10 @@
 						wind-speed="forecastDay.maxwind.mph"
 						wind-direction="forecastDay.maxwind.dir"
 						icon-path="forecastDay.icon_url"
+						icon="forecastDay.icon"
 						temp-high="forecastDay.high.celsius"
 						temp-low="forecastDay.low.celsius"
+						date="forecastDay.date"
 					></weather-summary>
 				</a>
 			</div>
@@ -48,6 +51,7 @@
 	<!-- Services -->
 	<script type="text/javascript" src="app/js/services/weather.js"></script>
 	<script type="text/javascript" src="app/js/services/location.js"></script>
+	<script type="text/javascript" src="app/js/services/googleLocation.js"></script>
 
 
 	<!-- Directives -->

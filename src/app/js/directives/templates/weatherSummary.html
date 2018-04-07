@@ -3,8 +3,9 @@
  		<span ng-repeat="period in periods" class="{{period.name}}">{{period.value}} </span>
 	</div>
 	<div class="condition-container">
-		<div class="condition-image-wrapper">			
-			<img class="conditionImg" ng-src="{{iconPath}}">
+		<div class="condition-image-wrapper">
+			<!--<img class="conditionImg" ng-src="https://icons.wxug.com/i/c/j/{{icon}}.gif">-->
+			<i class="wi {{iconClass}}"></i>
 			<div class="condition">{{condition}}</div>		
 		</div>
 	</div>
@@ -12,13 +13,13 @@
 		<span ng-show="tempCurrent" class="current-temp">{{tempCurrent}}<span class="degree-c-symbol">&#176c</span>
 		</span>
 		<div ng-show="tempHigh" class="high-temp-wrapper">
-			<span class="glyphicon glyphicon-menu-up"></span>
+			<span class="fa fa-angle-up"></span>
 			<span class="high-temp">{{tempHigh}}<span class="degree-c-symbol">&#176c</span></span>
 		</div>
 
 		<div ng-show="tempLow" class="low-temp-wrapper">
 			<span class="low-temp">{{tempLow}}<span class="degree-c-symbol">&#176c</span></span>
-			<span class="glyphicon glyphicon-menu-down"></span>
+			<span class="fa fa-angle-down"></span>
 		</div>
 
 	</div>

@@ -3,10 +3,9 @@ angular.module('Weather').factory('locationService',[
     '$q',
     '$rootScope',
     function($http,$q, $rootScope) {
+        var corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
         var baseUrl = 'http://api.wunderground.com/api';
         var key = '86f57048d0dd410f';
-        var state = 'CA';
-        var location = "San_Francisco";
         var responseFormat = '.json';
         var getCall = function(url) {
             var deferred = $q.defer();
@@ -22,18 +21,18 @@ angular.module('Weather').factory('locationService',[
         var service = {
             search: function(term) {
                 let baseUrl = 'http://autocomplete.wunderground.com/aq?query=';
-                let url = baseUrl + term;
+                let url = `${corsProxyUrl}${baseUrl}${term}`;
                 return getCall(url);
             },
             geoLookup: function (locationQueryString) {
                 const resource = 'geolookup';
                 let urlArray = [baseUrl, key, resource];
                 if (!locationQueryString) {
-                    urlArray.push('autoip');
+                    urlArray.push('q/autoip');
                 } else {
                     urlArray.push(locationQueryString);
                 }
-                const url = `${[baseUrl, key, resource].join('/')}${locationQueryString}${responseFormat}`;
+                const url = `${urlArray.join('/')}${responseFormat}`;
                 return getCall(url);
             },
             getCurrentLocation: function() {
@@ -50,10 +49,8 @@ angular.module('Weather').factory('locationService',[
             setCurrentLocation: function(locationObj) {
                 if(!locationObj) {
                     this.geoLookup().then(success => {
-                        debugger;
                         if(success.data.hasOwnProperty('location')) {
-                            localStorage.setItem('currentLocation', JSON.stringify(success));
-
+                            localStorage.setItem('currentLocation', JSON.stringify(success.data.location));
                             console.log(localStorage.getItem('currentLocation'));
                         } else {
                             console.log('autoIp failed');
@@ -62,7 +59,6 @@ angular.module('Weather').factory('locationService',[
                     });
                 } else {
                     localStorage.setItem('currentLocation', JSON.stringify(locationObj));
-                    console.log(localStorage.getItem('currentLocation'));
                     $rootScope.$broadcast('event: locationChange');
                 }
             }

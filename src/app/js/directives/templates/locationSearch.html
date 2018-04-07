@@ -1,8 +1,8 @@
-<div>
-    '<input class="text" type="text" name="" placeholder="Type a location" ng-model="searchTerm">'
-</div>
-<div>
-    <ul ng-repeat="location in searchResults.RESULTS">
-        <li class="search-result" ng-click="selectLocation(location)">{{location.name}}</li>
-    </ul>
+<div class="location-search">
+    <form class="search-form">
+        <input class="search-input" type="text" name="" placeholder="Type a location" ng-model="searchTerm">'
+        <ul class="search-results">
+            <li class="search-result" ng-repeat="location in searchResults" ng-click="selectLocation(location)">{{location.name}}</li>
+        </ul>
+    </form>
 </div>

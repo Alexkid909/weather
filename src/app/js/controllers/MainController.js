@@ -14,15 +14,12 @@ angular.module('Weather').controller('MainController',[
             };
             function getCurrentLocation() {
                 locationService.getCurrentLocation().then(success => {
-                    debugger;
                     locationService.geoLookup(success.l).then(success => {
                     	const location = success.data.location;
                     	$scope.currentLocation = `${location.city}, ${location.country === 'US' ? `${location.state} ` : `${location.country_name}`} `;
-                    	debugger;
 					})
                 }, error => {
                     console.log(error);
-                    debugger;
                 });
             }
 			function getForecast10Day() {

@@ -11,7 +11,7 @@
 		wind-direction="currentWeather.wind_dir"
 		wind-degree="currentWeather.wind_degrees"
 		icon-path="currentWeather.icon_url"
-		time-zone="location.local_tz_long"
+		icon="currentWeather.icon"
 	></weather-summary>
 </div>
 <!--<span>{{forecastWeather.hour}}</span>-->
@@ -21,12 +21,11 @@
 	class="hourly-summary"
 	periods="[{'name':'hour', 'value': hr.FCTTIME.hour + ':' + hr.FCTTIME.min}]"
 	date="hr.FCTTIME"
-	time-zone="location.tz_long"
 	temp-current="hr.temp.metric"
 	wind-speed="hr.wspd.english"
 	wind-direction="hr.wdir.dir"
 	wind-degree="hr.wdir.degrees"
 	icon-path="hr.icon_url"
-	time-zone="location."
+	icon="hr.icon"
 	></weather-summary>
 </div>

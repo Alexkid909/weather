@@ -22,7 +22,7 @@ angular.module('Weather')
                     $scope.todayForecast.hour = hourly_forecast.filter(hour => hour.FCTTIME.mday == currentMDay && hour.FCTTIME.hour > currentHour);
                     console.log('todayForecast', $scope.todayForecast);
                 },function(error) {
-                    $scope.errors = []
+                    $scope.errors = [];
                     $scope.errors.push(error);
                 });
 			}
