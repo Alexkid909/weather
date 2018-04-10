@@ -21,18 +21,21 @@ angular.module('Weather')
                     const currentHour = currentDate.getHours();
                     $scope.todayForecast.hour = hourly_forecast.filter(hour => hour.FCTTIME.mday == currentMDay && hour.FCTTIME.hour > currentHour);
                     console.log('todayForecast', $scope.todayForecast);
+                    $scope.loadingHours = false;
                 },function(error) {
                     $scope.errors = [];
                     $scope.errors.push(error);
                 });
-			}
-
+            }
 			function getCurrentWeather() {
+
                 weather.getCurrentWeather()
                     .then(success => {
                         $scope.currentWeather = success.data.current_observation;
                         console.log('currentWeather', $scope.currentWeather);
+                        $scope.loadingDay = false;
                     }, error => console.log(error));
+
             }
             getCurrentWeather();
 			getHourlyToday();

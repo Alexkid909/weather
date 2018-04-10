@@ -17,23 +17,26 @@
 			<div class="search-container">
 				<location-search></location-search>
 			</div>
-			<h1>Current Weather</h1><h2>{{weatherLocation.name}}</h2>
-			<span class="location">Location: {{currentLocation}}</span>
-			<div class="daily-summaries">
-				<a href="#/weather_day/{{$index}}/" ng-repeat="forecastDay in forecastWeather">
-					<weather-summary
-						class="daily-summary"
-						periods="[{'name':'dayName', 'value': forecastDay.date.weekday_short}, {'name': 'dayWithSuffix', 'value':appendDaySuffix(forecastDay.date.day)}]"
-						wind-speed="forecastDay.maxwind.mph"
-						wind-direction="forecastDay.maxwind.dir"
-						icon-path="forecastDay.icon_url"
-						icon="forecastDay.icon"
-						temp-high="forecastDay.high.celsius"
-						temp-low="forecastDay.low.celsius"
-						date="forecastDay.date"
-					></weather-summary>
-				</a>
+			<h1 class="location">Location: {{currentLocation}}</h1>
+			<div class="daily-summaries-container">
+				<loader loading="loadingForecast"></loader>
+				<div class="daily-summaries">
+					<a href="#/weather_day/{{$index}}/" ng-repeat="forecastDay in forecastWeather">
+						<weather-summary
+								class="daily-summary"
+								periods="[{'name':'dayName', 'value': forecastDay.date.weekday_short}, {'name': 'dayWithSuffix', 'value':appendDaySuffix(forecastDay.date.day)}]"
+								wind-speed="forecastDay.maxwind.mph"
+								wind-direction="forecastDay.maxwind.dir"
+								icon-path="forecastDay.icon_url"
+								icon="forecastDay.icon"
+								temp-high="forecastDay.high.celsius"
+								temp-low="forecastDay.low.celsius"
+								date="forecastDay.date"
+						></weather-summary>
+					</a>
+				</div>
 			</div>
+
 			<div ng-view></div>
 		</div>
 	</div> 
@@ -58,6 +61,7 @@
 
 	<script type="text/javascript" src="app/js/directives/weatherSummary.js"></script>
 	<script type="text/javascript" src="app/js/directives/locationSearch.js"></script>
+	<script type="text/javascript" src="app/js/directives/loader.js"></script>
 	<!-- Filters -->
 
 <!-- 	<script src="js/filters/isBetweenDateTimes.js"></script> -->

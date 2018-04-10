@@ -2,7 +2,9 @@ angular.module('Weather').controller('MainController',[
 		'weather',
 		'$scope',
 		'locationService',
-		function(weather,$scope, locationService) {
+		'$timeout',
+		function(weather,$scope, locationService, $timeout) {
+			$scope.loadingForecast = true;
 			$scope.errors = [];
 			$scope.currentLocation = '';
 			$scope.weatherLocation;
@@ -23,9 +25,12 @@ angular.module('Weather').controller('MainController',[
                 });
             }
 			function getForecast10Day() {
+                $scope.loadingForecast = true;
 				weather.getForecast10Day().then(success => {
 					$scope.forecastWeather = success.data.forecast.simpleforecast.forecastday;
-				},error => {
+					$scope.loadingForecast = false;
+
+                },error => {
 					$scope.errors = [];
 					$scope.errors.push(error);
 				});	

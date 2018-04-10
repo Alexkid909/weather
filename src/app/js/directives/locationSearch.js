@@ -5,6 +5,8 @@ angular.module('Weather').directive('locationSearch', [
             restrict: 'E',
             templateUrl: 'app/js/directives/templates/locationSearch.html',
             controller: function($scope,locationService) {
+                $scope.loadingSearchResults = false;
+                $scope.searchResults = [];
                 function resetSearchField() {
                     $scope.searchTerm = '';
                 }
@@ -17,9 +19,11 @@ angular.module('Weather').directive('locationSearch', [
                     if (!newValue) {
                         resetSearchResults()
                     } else if (newValue !== oldValue) {
+                        $scope.loadingSearchResults = true;
                         locationService.search(newValue)
                             .then(function(success) {
                                 $scope.searchResults = success.data.RESULTS.slice(0,5);
+                                $scope.loadingSearchResults = false;
                             },function(error) {
                                 console.log(error);
                             });

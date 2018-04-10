@@ -23,8 +23,6 @@ angular.module('Weather').directive('weatherSummary',[
 			$scope.$watch('icon', function(newValue) {
 				$scope.iconClass = getIconClass();
 			});
-			$scope.$watch('iconClass', function(newValue) {
-			});
 
             function isNighttime() {
                 const daynightPrefixArray = $scope.iconPath.split("/");
@@ -45,7 +43,7 @@ angular.module('Weather').directive('weatherSummary',[
                     case 'chancetstorms':
                         return isNighttime() ? 'wi-night-alt-thunderstorm' : 'wi-day-thunderstorm';
                     case 'clear':
-                        return isNighttime() ? 'wi-night-alt-clear' : 'wi-day-sunny';
+                        return isNighttime() ? 'wi-night-clear' : 'wi-day-sunny';
                     case 'cloudy':
                         return isNighttime() ? 'wi-night-alt-cloudy' : 'wi-cloudy';
                     case 'flurries':
@@ -59,9 +57,9 @@ angular.module('Weather').directive('weatherSummary',[
                     case 'mostlysunny':
                         return isNighttime() ? 'wi-night-clear' : 'wi-day-sunny';
                     case 'partlycloudy':
-                        return isNighttime() ? 'wi-night-partly-cloudty' : 'wi-day-sunny-overcast';
+                        return isNighttime() ? 'wi-night-alt-partly-cloudy' : 'wi-day-sunny-overcast';
                     case 'partlysunny':
-                        return isNighttime() ? 'wi-night-partly-cloudty' : 'wi-day-sunny-overcast';
+                        return isNighttime() ? 'wi-night-alt-partly-cloudy' : 'wi-day-sunny-overcast';
                     case 'sleet':
                         return isNighttime() ? 'wi-night-alt-sleet' : 'wi-day-sleet';
                     case 'rain':
@@ -69,7 +67,7 @@ angular.module('Weather').directive('weatherSummary',[
                     case 'snow':
                         return isNighttime() ? 'wi-night-alt-snow' : 'wi-day-snow';
                     case 'sunny':
-                        return isNighttime() ? 'wi-night-alt-clear' : 'wi-day-sunny';
+                        return isNighttime() ? 'wi-night-clear' : 'wi-day-sunny';
                     case 'tstorms':
                         return isNighttime() ? 'wi-night-alt-thunderstorm' : 'wi-day-thunderstorm';
                     case 'cloudy':

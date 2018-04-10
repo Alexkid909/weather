@@ -15,17 +15,19 @@
 	></weather-summary>
 </div>
 <!--<span>{{forecastWeather.hour}}</span>-->
-<div ng-repeat="hr in todayForecast.hour">
- 	<!--<span>{{hr}}</span>-->
-	<weather-summary
-	class="hourly-summary"
-	periods="[{'name':'hour', 'value': hr.FCTTIME.hour + ':' + hr.FCTTIME.min}]"
-	date="hr.FCTTIME"
-	temp-current="hr.temp.metric"
-	wind-speed="hr.wspd.english"
-	wind-direction="hr.wdir.dir"
-	wind-degree="hr.wdir.degrees"
-	icon-path="hr.icon_url"
-	icon="hr.icon"
-	></weather-summary>
+<div class="hourly-summaries">
+	<loader loader-class="hours-loader" loading="loadingHours"></loader>
+	<div ng-repeat="hr in todayForecast.hour" class="hourly-summary-container">
+		<weather-summary
+			class="hourly-summary"
+			periods="[{'name':'hour', 'value': hr.FCTTIME.hour + ':' + hr.FCTTIME.min}]"
+			date="hr.FCTTIME"
+			temp-current="hr.temp.metric"
+			wind-speed="hr.wspd.english"
+			wind-direction="hr.wdir.dir"
+			wind-degree="hr.wdir.degrees"
+			icon-path="hr.icon_url"
+			icon="hr.icon"
+		></weather-summary>
+	</div>
 </div>

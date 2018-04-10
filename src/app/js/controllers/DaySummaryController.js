@@ -5,26 +5,26 @@ angular.module('Weather')
 		'$scope',
 		'$routeParams',
 		function(weather, locationService, $scope,$routeParams) {
+            $scope.loadingDay = true;
+            $scope.loadingHours = true;
 			$scope.errors = [];
 			$scope.dayForecast = {};
             $scope.appendDaySuffix = function(dayNumber) {
                 var suffixes = ['st','nd','rd','th'];
                 var suffix = dayNumber > 3 ? suffixes[3] : suffixes[dayNumber - 1];
-                return dayNumber + suffix;
+                debugger;
+                var result = dayNumber + suffix;
+                isNaN(result) ? false : result;
             };
-
-            // function getLocation() {
-            //     locationService.geoLookup().then(success => {
-            //         $scope.location = success.data.location;
-            //     },error => console.log(error));
-            // }
-            // getLocation();
 
 
 			function getForecast10Day(day) {
-                weather.getForecast10Day().then(function(success) {
+                $scope.loadingDay = true;
+			    weather.getForecast10Day().then(function(success) {
                     $scope.dayForecast = success.data.forecast.simpleforecast.forecastday[day];
-                    getHourlyForecastForDay($routeParams.id)
+                    getHourlyForecastForDay($routeParams.id);
+                    $scope.loadingDay = false;
+                    $scope.loadingDay = false;
                 },function(error) {
                     $scope.errors = [];
                     $scope.errors.push(error);
@@ -34,9 +34,11 @@ angular.module('Weather')
 
 
 			function getHourlyForecastForDay(day) {
+                $scope.loadingHours = true;
 			    const currentDay = new Date().getDate();
 			    weather.getHourly10Day().then(success => {
                     $scope.dayForecast.hour = success.data.hourly_forecast.filter(hour => hour.FCTTIME.mday == currentDay + parseInt(day));
+                    $scope.loadingHours = false;
                 },function(error) {
 			        console.log(error)
                 });

@@ -1,8 +1,14 @@
 <div class="location-search">
     <form class="search-form">
-        <input class="search-input" type="text" name="" placeholder="Type a location" ng-model="searchTerm">'
-        <ul class="search-results">
-            <li class="search-result" ng-repeat="location in searchResults" ng-click="selectLocation(location)">{{location.name}}</li>
-        </ul>
+        <input
+                class="search-input"
+                type="text"
+                name=""
+                placeholder="Type a location"
+                ng-model="searchTerm">
     </form>
+    <ul class="search-results" ng-class="{'active' : searchTerm.length > 0}">
+        <loader loading="loadingSearchResults"></loader>
+        <li ng-if="searchResults.length > 0" class="search-result" ng-repeat="location in searchResults" ng-click="selectLocation(location)">{{location.name}}</li>
+    </ul>
 </div>

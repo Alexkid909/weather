@@ -30,7 +30,7 @@
 		</span>
 		<span ng-show="windSpeedMin" class="wind-speed-min">{{windSpeedMin}}<span class="wind-mph">mph</span>
 		</span>				
-		<span class="wind-direction">{{windDirection}}</span>
+		<span class="wind-direction">{{windDirection.length > 3 ? windDirection.charAt(0) : windDirection}}</span>
 		<img ng-show="windDegree" ng-src="app/assets/images/icons/up-arrow.png" class="wind-direction-arrow" style="transform: rotate({{windDegree}}deg)"></span>
 	</div>
 </div>

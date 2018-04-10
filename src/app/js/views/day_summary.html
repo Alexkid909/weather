@@ -1,4 +1,5 @@
 <div class="main-summary">
+	<loader loader-class="summary-loader" loading="loadingDay"></loader>
 	<weather-summary
 		class="forecast-summary"
 		periods="[{'name':'dayName', 'value': dayForecast.date.weekday_short}, {'name': 'dayWithSuffix', 'value': appendDaySuffix(dayForecast.date.day)}]"
@@ -10,15 +11,19 @@
 		icon="dayForecast.icon"
 	></weather-summary>
 </div>
-<div ng-repeat="hr in dayForecast.hour">
-	<weather-summary
-	class="hourly-summary"
-	periods="[{'name':'hour', 'value': hr.FCTTIME.hour + ':' + hr.FCTTIME.min}]"	time-zone="location.tz_long"
-	temp-current="hr.temp.metric"
-	wind-speed="hr.wspd.english"
-	wind-direction="hr.wdir.dir"
-	wind-degree="hr.wdir.degrees"
-	icon-path="hr.icon_url"
-	icon="hr.icon"
-	></weather-summary>
+
+<div class="hourly-summaries">
+	<loader loader-class="hours-loader" loading="loadingHours"></loader>
+	<div ng-repeat="hr in dayForecast.hour" class="hourly-summary-container">
+		<weather-summary
+				class="hourly-summary"
+				periods="[{'name':'hour', 'value': hr.FCTTIME.hour + ':' + hr.FCTTIME.min}]"	time-zone="location.tz_long"
+				temp-current="hr.temp.metric"
+				wind-speed="hr.wspd.english"
+				wind-direction="hr.wdir.dir"
+				wind-degree="hr.wdir.degrees"
+				icon-path="hr.icon_url"
+				icon="hr.icon"
+		></weather-summary>
+	</div>
 </div>
