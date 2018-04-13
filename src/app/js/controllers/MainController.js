@@ -9,6 +9,9 @@ angular.module('Weather').controller('MainController',[
 			$scope.currentLocation = '';
 			$scope.weatherLocation;
 			$scope.forecastWeather;
+			$scope.localTimeString = function() {
+
+			};
             $scope.appendDaySuffix = function(dayNumber) {
                 var suffixes = ['st','nd','rd','th'];
                 var suffix = dayNumber > 3 ? suffixes[3] : suffixes[dayNumber - 1];

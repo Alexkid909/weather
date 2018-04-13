@@ -30,6 +30,12 @@ angular.module('Weather').directive('weatherSummary',[
                 return (dayNightPrefx.slice(0,2) === 'nt');
             }
 
+            // if ($scope.class === 'forecast-summary') {
+            //     $scope.$watch('periods', function(newValue) {
+            //         console.log(newValue);
+            //     })
+            // }
+
 			function getIconClass() {
                 switch ($scope.icon) {
                     case 'chanceflurries':

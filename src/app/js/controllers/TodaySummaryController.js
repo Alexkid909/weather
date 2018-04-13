@@ -15,12 +15,13 @@ angular.module('Weather')
 
 			function getHourlyToday() {
 				weather.getHourlyToday().then(function(success) {
+				    console.log(success);
                     const hourly_forecast = success.data.hourly_forecast;
-                    const currentDate = new Date;
-                    const currentMDay = currentDate.getDate();
-                    const currentHour = currentDate.getHours();
+                    const currentDate = new Date($scope.currentWeather.local_epoch * 1000);
+                    const localDate = new Date(currentDate.toLocaleString('en', {timeZone: $scope.currentWeather.local_tz_long}));
+                    const currentMDay = localDate.getDate();
+                    const currentHour = localDate.getHours();
                     $scope.todayForecast.hour = hourly_forecast.filter(hour => hour.FCTTIME.mday == currentMDay && hour.FCTTIME.hour > currentHour);
-                    console.log('todayForecast', $scope.todayForecast);
                     $scope.loadingHours = false;
                 },function(error) {
                     $scope.errors = [];
@@ -32,18 +33,17 @@ angular.module('Weather')
                 weather.getCurrentWeather()
                     .then(success => {
                         $scope.currentWeather = success.data.current_observation;
-                        console.log('currentWeather', $scope.currentWeather);
+                        getHourlyToday();
                         $scope.loadingDay = false;
+
                     }, error => console.log(error));
 
             }
             getCurrentWeather();
-			getHourlyToday();
 
             $scope.$on('event: locationChange', function() {
                 console.log('updating TodaySummaryController');
                 getCurrentWeather();
-                getHourlyToday();
             });
 
         }

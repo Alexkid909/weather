@@ -10,11 +10,12 @@ angular.module('Weather')
 			$scope.errors = [];
 			$scope.dayForecast = {};
             $scope.appendDaySuffix = function(dayNumber) {
-                var suffixes = ['st','nd','rd','th'];
-                var suffix = dayNumber > 3 ? suffixes[3] : suffixes[dayNumber - 1];
-                debugger;
-                var result = dayNumber + suffix;
-                isNaN(result) ? false : result;
+                if (dayNumber) {
+                    var suffixes = ['st','nd','rd','th'];
+                    var suffix = dayNumber > 3 ? suffixes[3] : suffixes[dayNumber - 1];
+                    var result = dayNumber + suffix;
+                    return result;
+                }
             };
 
 
@@ -35,14 +36,23 @@ angular.module('Weather')
 
 			function getHourlyForecastForDay(day) {
                 $scope.loadingHours = true;
-			    const currentDay = new Date().getDate();
-			    weather.getHourly10Day().then(success => {
-                    $scope.dayForecast.hour = success.data.hourly_forecast.filter(hour => hour.FCTTIME.mday == currentDay + parseInt(day));
-                    $scope.loadingHours = false;
+                locationService.getCurrentLocation().then(function(success) {
+                    console.log(success);
+                    const currentDate = new Date();
+                    const localDate = new Date(currentDate.toLocaleString('en', {timeZone: success.tz}));
+                    const currentDay = new Date(localDate).getDate();
+                    weather.getHourly10Day().then(success => {
+                        $scope.dayForecast.hour = success.data.hourly_forecast.filter(hour => hour.FCTTIME.mday == currentDay + parseInt(day));
+                        console.log($scope.dayForecast);
+                        $scope.loadingHours = false;
+                    },function(error) {
+                        console.log(error)
+                    });
                 },function(error) {
-			        console.log(error)
+                    console.log(error)
                 });
             }
+
 
 
             $scope.$on('event: locationChange', function() {
