@@ -16,7 +16,7 @@ $start: 1;
 $end: 10;
 
 html, body.body {
-	font-size: 1.1vh;
+	font-size: 2vw;
 	line-height: 1;
 	font-weight: 600;
 }
@@ -32,6 +32,10 @@ a {
 	text-decoration: none;
 }
 
+input {
+	font-size:  3vw;
+}
+
 .location-search {
 	position: relative;
 	font-size: 3rem;
@@ -39,7 +43,6 @@ a {
 
 	ul.search-results {
 		color: black;
-		padding-left: 1rem;
 		transition: height 1000ms;
 		background-color: white;
 		position: absolute;
@@ -72,7 +75,7 @@ a {
 	form.search-form {
 		input.search-input {
 			font-family: inherit;
-			font-size: inherit;
+			font-size: 1em;
 			border: none;
 			padding: 0.5rem 0.25rem 1rem 0.25rem;
 			width: 100%;
@@ -184,23 +187,20 @@ div.background-container {
 		color: white;
 		.weather-summary-wrapper {
 			background-color: rgba(200,200,200,0.25);
-			padding: 0.25rem;
+			padding: 1px 0.25rem;
 			display: grid;
-			grid-template-columns: repeat(5, 1fr);
 			grid-column-gap: 1rem;
-			grid-row-gap: 1rem;
 			grid-auto-rows: minmax(auto, auto);				
 			&>div {
 				padding: 0;
 				text-align: center;
-				margin: 1.5rem 0;
+				margin: 1rem 0;
 			}
 			.period-container, .condition-container {
-				grid-column: 1/3;
-
+				grid-column: 1/6;
 			}
 			.temp-container, .wind-container {
-				grid-column: 3/6;
+				grid-column: 5/10;
 			}
 			.condition-container {
 				grid-row: 2/4;
@@ -209,7 +209,7 @@ div.background-container {
 					left: 0;
 					right: 0;
 					.condition {
-						font-size: 0.3em;
+						font-size: 0.4em;
 					}
 
 				}
@@ -257,7 +257,6 @@ div.background-container {
 				grid-row: 3;
 				text-align: right;
 				font-size: 0.9em;
-				margin-top: 1.5rem;
 				.wind-direction {
 					font-size: 0.5em;
 				}
@@ -271,6 +270,7 @@ div.background-container {
 				}						
 			}			
 			.period-container {
+				grid-row: 1/1;
 				span {
 					// margin-right: 1rem;
 					&.dayWithSuffix {
@@ -285,9 +285,9 @@ div.background-container {
 
 		&.today-summary {
 			.weather-summary-wrapper {
-				//.period-container {
-				//	font-size: 1.5em;
-				//}
+				.period-container {
+					font-size: 1.5em;
+				}
 				.temp-container {
 					display: grid;
 					grid-row: 1/3;
@@ -314,7 +314,7 @@ div.background-container {
     			grid-row: 1/3;
     			margin-left: 0.25em; 
 				.high-temp, .low-temp {
-					margin-left: 2rem;					
+					margin-left: 0.25em;
 				}					
 				.glyphicon {
 					text-align: right;
@@ -324,9 +324,12 @@ div.background-container {
 		&.hourly-summary {
 			font-size: 3.5em;
 			.weather-summary-wrapper {
-				grid-template-columns: repeat(12,1fr);
+				display: grid;
+				grid-template-columns: repeat(10,1fr);
 				grid-row-gap: 0;
-				padding: 1rem 0.5rem 1.25rem 0.5rem;
+				padding: 0.5em 0.25em
+			;
+				margin-bottom: 3.5px;
 				&>div {
 					margin: auto 0;
 					grid-row: 1;
@@ -350,33 +353,57 @@ div.background-container {
 	}
 	.daily-summaries-container {
 		position: relative;
+		overflow-y: scroll;
 		margin-bottom: 0.5rem;
 		.daily-summaries {
-			height: 44vw;
+			//height: 44vw;
 			position: relative;
 			display: grid;
 			width: 200%;
+			//height: 100%;
 			grid-template-columns: repeat(10, 1fr);
-			grid-template-rows: 1fr;
 			grid-column-gap: 0.5%;
 			grid-auto-columns: minmax(auto, auto);
 			grid-auto-rows: minmax(auto, auto);
 			overflow-x: hidden;
 			font-size: 1em;
 			weather-summary.daily-summary {
+				grid-template-rows: repeat(6, 1fr);
 
 				.weather-summary-wrapper {
+
+					&>div {
+						grid-column: 1;
+					}
+
+					.period-container {
+						grid-row: 1/1;
+					}
+
+					.condition-container {
+						grid-row: 2/4;
+					}
+
+					.temp-container {
+						grid-row: 4/6;
+					}
+
+					.wind-container {
+						grid-row: 6/6;
+					}
+
 					font-size: 3em;
-					//width: 100%;
-					display: block;
 					.temp-container, .wind-container {
-						font-size: 0.9em;
+						font-size: 0.8em;
 					}
 					.wind-container {
 						text-align: center;
 					}
 				}
 			}
+		}
+		.loader-container {
+			background-color: transparent;
 		}
 	}
 
@@ -389,12 +416,13 @@ div.background-container {
 		}
 		.weather-summary-wrapper {
 			height: 100%;
-			padding: 0 2rem;
+			padding: 0;
 			.condition-container {
 				.condition-image-wrapper {
 					.wi {
 						font-size: 2em;
-						margin-bottom: 3.5rem;
+						margin-bottom: 0.35em;
+						margin-top: 0.25em;
 					}
 				}
 			}
@@ -421,5 +449,105 @@ div.background-container {
 		i.wi {
 			font-size: 0.85em;
 		}
+	}
+}
+
+@media (min-aspect-ratio: 10/6) {
+	body.body {
+		font-size: 0.9vw;
+	}
+
+	.location-search {
+		font-size: 1.5rem;
+		form.search-form {
+			input.search-input {
+				font-size: 1em;
+				padding-bottom: 0.5em;
+			}
+		}
+	}
+
+	.main {
+		padding-top: 0.5rem;
+		.main-summary {
+			height: auto;
+			font-size: 1.25em;
+
+			weather-summary {
+				.weather-summary-wrapper {
+					height: auto;
+				}
+			}
+		}
+		height: auto;
+		weather-summary {
+			.weather-summary-wrapper > div {
+				margin: 0.5rem 0;
+			}
+		}
+		.main-container {
+			margin: 0 1rem;
+			display: grid;
+			grid-column-gap: 0.5rem;
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-rows: auto;
+			.search-container {
+				grid-row: auto;
+				grid-column: 2;
+
+				.search-results, .search-form {
+					width: 98%;
+				}
+			}
+			.location {
+				grid-row: 1;
+				grid-column: 1;
+				font-size: 2.5em;
+			}
+			.daily-summaries-container {
+
+				grid-row: 2;
+				grid-column: 1/3;
+				display: grid;
+				.daily-summaries {
+					width: auto;
+
+					a {
+						grid-row: 1/1;
+					}
+
+					.temp-container, .wind-container {
+						display: none;
+					}
+				}
+			}
+			.view {
+				display: grid;
+				grid-row: 3;
+				grid-column: 1/3;
+				grid-template-columns: repeat(2, 1fr);
+				grid-column-gap: 0.5em;
+
+				.main-summary {
+					grid-column: 1;
+				}
+
+				.hourly-summaries {
+					grid-column: 2;
+				}
+			}
+		}
+		.daily-summaries-container {
+			.daily-summaries {
+				height: auto;
+			}
+		}
+	}
+}
+
+
+@media (min-aspect-ratio: 10/6) and (min-width: 768px) {
+	body.body {
+		font-size: 0.5vw;
 	}
 }

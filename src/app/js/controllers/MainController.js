@@ -2,8 +2,7 @@ angular.module('Weather').controller('MainController',[
 		'weather',
 		'$scope',
 		'locationService',
-		'$timeout',
-		function(weather,$scope, locationService, $timeout) {
+		function(weather,$scope, locationService) {
 			$scope.loadingForecast = true;
 			$scope.errors = [];
 			$scope.currentLocation = '';
@@ -12,19 +11,23 @@ angular.module('Weather').controller('MainController',[
 			$scope.localTimeString = function() {
 
 			};
-            $scope.appendDaySuffix = function(dayNumber) {
-                var suffixes = ['st','nd','rd','th'];
-                var suffix = dayNumber > 3 ? suffixes[3] : suffixes[dayNumber - 1];
-                return dayNumber + suffix;
+            $scope.appendDaySuffix = dayNumber => {
+                const suffixes = ['st','nd','rd','th'];
+                const suffix = dayNumber > 3 ? suffixes[3] : suffixes[dayNumber - 1];
+                return dayNumber + suffix
             };
             function getCurrentLocation() {
                 locationService.getCurrentLocation().then(success => {
                     locationService.geoLookup(success.l).then(success => {
                     	const location = success.data.location;
                     	$scope.currentLocation = `${location.city}, ${location.country === 'US' ? `${location.state} ` : `${location.country_name}`} `;
-					})
-                }, error => {
+                    },error => {
+                        console.log(error);
+                        Raven.captureException(error);
+                    });
+                },error => {
                     console.log(error);
+                    Raven.captureException(error);
                 });
             }
 			function getForecast10Day() {
@@ -37,10 +40,10 @@ angular.module('Weather').controller('MainController',[
 					$scope.errors = [];
 					$scope.errors.push(error);
 				});	
-			};
+			}
 			getForecast10Day();
 			getCurrentLocation();
-			$scope.$on('event: locationChange', function() {
+			$scope.$on('event: locationChange', () => {
 				console.log('updating MainController');
 				getForecast10Day();
 				getCurrentLocation();

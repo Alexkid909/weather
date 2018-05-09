@@ -1,9 +1,13 @@
-var gulp = require('gulp');
-var sass = require('gulp-sass');
-var browserSync = require('browser-sync').create();
-// var autoprefixer = require('gulp-autoprefixer');
-var install = require('gulp-install');
-var paths = {
+const gulp = require('gulp');
+const sass = require('gulp-sass');
+const browserSync = require('browser-sync').create();
+const sourcemaps = require('gulp-sourcemaps');
+const install = require('gulp-install');
+const babel = require('gulp-babel');
+// const concat = require('gulp-concat');
+// const autoprefixer = require('gulp-autoprefixer');
+
+const paths = {
     src: {
         root: './src/**/*',
         HTML: './src/**/*.html',
@@ -35,8 +39,8 @@ var paths = {
 function copyHtmlToTmp() {
     return gulp.src(paths.src.HTML)
         .pipe(gulp.dest(paths.tmp.root));
-};
-gulp.task('copyHtmlToTmp', copyHtmlToTmp)
+}
+gulp.task('copyHtmlToTmp', copyHtmlToTmp);
 
 function copySassToTmp() {
     return gulp.src(paths.src.SASS)
@@ -48,7 +52,20 @@ function copyJsToTmp() {
     return gulp.src(paths.src.JS)
         .pipe(gulp.dest(paths.tmp.JS));
 }
+
 gulp.task('copyJsToTmp',copyJsToTmp);
+
+function babelTranspileToTmp() {
+    return gulp.src(paths.src.JS)
+        .pipe(sourcemaps.init())
+        .pipe(babel({
+            presets: ['env']
+        }))
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(paths.tmp.JS));
+}
+
+gulp.task('babelTranspileToTmp', babelTranspileToTmp);
 
 function copyAssetsToTmp() {
     return gulp.src(paths.src.ASSETS)
@@ -61,7 +78,7 @@ function copyPackageJson() {
 }
 gulp.task('copyPackageJson',copyPackageJson);
 
-const copyToTmp = gulp.parallel(copyHtmlToTmp, copyJsToTmp, copySassToTmp, copyAssetsToTmp, copyPackageJson);
+const copyToTmp = gulp.parallel(copyHtmlToTmp, babelTranspileToTmp, copySassToTmp, copyAssetsToTmp, copyPackageJson);
 gulp.task('copyToTmp', copyToTmp);
 
 const npmInstallTmp = function() {
@@ -69,12 +86,18 @@ const npmInstallTmp = function() {
 };
 gulp.task('npmInstallTmp', npmInstallTmp);
 
-function compileSass() {
+function compileSassAndAutoPrefix() {
     return gulp.src(paths.tmp.SASS)
+        .pipe(sourcemaps.init())
         .pipe(sass().on('error', sass.logError))
+        // .pipe(autoprefixer({
+        //     browsers: ['last 2 versions'],
+        //     cascade: false
+        // }))
+        .pipe(sourcemaps.write('./maps'))
         .pipe(gulp.dest('./tmp/app/css'));
 }
-gulp.task('compileSass', compileSass);
+gulp.task('compileSassAndAutoPrefix', compileSassAndAutoPrefix);
 
 function watchSrc() {
     gulp.watch(paths.src.HTML, copyHtmlToTmp);
@@ -88,7 +111,7 @@ gulp.task('watchSrc',watchSrc);
 function watchTmp() {
     gulp.watch(['./tmp/**/*.js','./tmp/**/*.css','./tmp/**/*.html']).on('change', browserSync.reload);
     // gulp.watch('tmp/app/css/style.css',['autoprefixer']);
-    gulp.watch(paths.tmp.SASS, compileSass);
+    gulp.watch(paths.tmp.SASS, compileSassAndAutoPrefix);
     gulp.watch(paths.tmp.NPMJson, npmInstallTmp)
 }
 gulp.task('watchTmp', watchTmp);
@@ -99,13 +122,13 @@ function runBrowserSync() {
             baseDir: "./tmp"
         }
     });
-};
+}
 gulp.task('browserSync', runBrowserSync);
 
 const watch = gulp.parallel(runBrowserSync, watchSrc, watchTmp);
 gulp.task('watch', watch);
 
-const build = gulp.series(copyToTmp, gulp.parallel(npmInstallTmp, compileSass));
+const build = gulp.series(copyToTmp, gulp.parallel(npmInstallTmp, compileSassAndAutoPrefix));
 gulp.task('build', build);
 
 const serve = gulp.series(build, watch);

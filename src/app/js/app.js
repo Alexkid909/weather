@@ -1,4 +1,4 @@
-angular.module('Weather',['ngRoute'])
+angular.module('Weather',['ngRoute', 'ngRaven'])
 .config(function($routeProvider,$locationProvider) {
 	$locationProvider.hashPrefix('');
 	$routeProvider

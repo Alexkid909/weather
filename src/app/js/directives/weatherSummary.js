@@ -17,24 +17,18 @@ angular.module('Weather').directive('weatherSummary',[
 			iconPath: '=',
 			icon: '='
 		},
-		controller: function(locationService, $scope,$filter,$element) {
+		controller: function(locationService, $scope) {
 			$scope.location = {};
 
-			$scope.$watch('icon', function(newValue) {
+			$scope.$watch('icon', function() {
 				$scope.iconClass = getIconClass();
 			});
 
             function isNighttime() {
                 const daynightPrefixArray = $scope.iconPath.split("/");
-                const dayNightPrefx = daynightPrefixArray[daynightPrefixArray.length-1]
+                const dayNightPrefx = daynightPrefixArray[daynightPrefixArray.length-1];
                 return (dayNightPrefx.slice(0,2) === 'nt');
             }
-
-            // if ($scope.class === 'forecast-summary') {
-            //     $scope.$watch('periods', function(newValue) {
-            //         console.log(newValue);
-            //     })
-            // }
 
 			function getIconClass() {
                 switch ($scope.icon) {

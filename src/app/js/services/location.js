@@ -3,12 +3,12 @@ angular.module('Weather').factory('locationService',[
     '$q',
     '$rootScope',
     function($http,$q, $rootScope) {
-        var corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
-        var baseUrl = 'http://api.wunderground.com/api';
-        var key = '86f57048d0dd410f';
-        var responseFormat = '.json';
-        var getCall = function(url) {
-            var deferred = $q.defer();
+        const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        const baseUrl = 'http://api.wunderground.com/api';
+        const key = '86f57048d0dd410f';
+        const responseFormat = '.json';
+        const getCall = function(url) {
+            const deferred = $q.defer();
             $http.get(url, {
                 cache: true
             }).then(function(success) {
@@ -18,7 +18,7 @@ angular.module('Weather').factory('locationService',[
                 });
             return deferred.promise
         };
-        var service = {
+        const service = {
             search: function(term) {
                 let baseUrl = 'http://autocomplete.wunderground.com/aq?query=';
                 let url = `${corsProxyUrl}${baseUrl}${term}`;
@@ -36,8 +36,8 @@ angular.module('Weather').factory('locationService',[
                 return getCall(url);
             },
             getCurrentLocation: function() {
-                var localStorageLocation = JSON.parse(localStorage.getItem('currentLocation'));
-                var deferred = $q.defer();
+                const localStorageLocation = JSON.parse(localStorage.getItem('currentLocation'));
+                const deferred = $q.defer();
                 if (localStorageLocation) {
                     deferred.resolve(localStorageLocation);
                 } else {
@@ -53,8 +53,10 @@ angular.module('Weather').factory('locationService',[
                             localStorage.setItem('currentLocation', JSON.stringify(success.data.location));
                             console.log(localStorage.getItem('currentLocation'));
                         } else {
-                            console.log('autoIp failed');
-                        };
+                            const error = new Error('autoIp lookup failed');
+                            console.log(error);
+                            Raven.captureException(error);
+                        }
                         $rootScope.$broadcast('event: locationChange')
                     });
                 } else {
