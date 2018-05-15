@@ -35,7 +35,6 @@ angular.module('Weather').controller('MainController',[
 				weather.getForecast10Day().then(success => {
 					$scope.forecastWeather = success.data.forecast.simpleforecast.forecastday;
 					$scope.loadingForecast = false;
-
                 },error => {
 					$scope.errors = [];
 					$scope.errors.push(error);

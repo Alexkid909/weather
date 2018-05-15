@@ -18,8 +18,8 @@
 		</div>
 
 		<div ng-show="tempLow" class="low-temp-wrapper">
-			<span class="low-temp">{{tempLow}}<span class="degree-c-symbol">&#176c</span></span>
 			<span class="fa fa-angle-down"></span>
+			<span class="low-temp">{{tempLow}}<span class="degree-c-symbol">&#176c</span></span>
 		</div>
 
 	</div>
@@ -29,7 +29,7 @@
 		<span ng-show="windSpeedMax" class="wind-speed-max">{{windSpeedMax}}<span class="wind-mph">mph</span>
 		</span>
 		<span ng-show="windSpeedMin" class="wind-speed-min">{{windSpeedMin}}<span class="wind-mph">mph</span>
-		</span>				
+		</span>
 		<span class="wind-direction">{{windDirection.length > 3 ? windDirection.charAt(0) : windDirection}}</span>
 		<img ng-show="windDegree" ng-src="app/assets/images/icons/up-arrow.png" class="wind-direction-arrow" style="transform: rotate({{windDegree}}deg)"></span>
 	</div>

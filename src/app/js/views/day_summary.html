@@ -15,7 +15,7 @@
 </div>
 
 <div class="hourly-summaries">
-	<loader loader-class="hours-loader" loading="loadingHours"></loader>
+	<loader loader-class="hours-loader" ng-show="loadingHours" loading="loadingHours"></loader>
 	<div ng-repeat="hr in dayForecast.hour" class="hourly-summary-container">
 		<weather-summary
 				class="hourly-summary"
