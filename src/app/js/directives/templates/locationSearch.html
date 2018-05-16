@@ -4,8 +4,11 @@
                 class="search-input"
                 type="text"
                 name=""
-                placeholder="Type a location"
+                placeholder={{searchPlaceholder}}
+                ng-focus="changeInputFocus(true)"
+                ng-blur="changeInputFocus(false)"
                 ng-model="searchTerm">
+
     </form>
     <ul class="search-results" ng-class="{'active' : searchTerm.length > 0}">
         <loader loading="loadingSearchResults"></loader>
