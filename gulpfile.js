@@ -5,7 +5,9 @@ const sourcemaps = require('gulp-sourcemaps');
 const install = require('gulp-install');
 const babel = require('gulp-babel');
 // const concat = require('gulp-concat');
-// const autoprefixer = require('gulp-autoprefixer');
+const autoprefixer = require('gulp-autoprefixer');
+const postCSS = require('gulp-postcss');
+
 
 const paths = {
     src: {
@@ -90,10 +92,10 @@ function compileSassAndAutoPrefix() {
     return gulp.src(paths.tmp.SASS)
         .pipe(sourcemaps.init())
         .pipe(sass().on('error', sass.logError))
-        // .pipe(autoprefixer({
-        //     browsers: ['last 2 versions'],
-        //     cascade: false
-        // }))
+        .pipe(autoprefixer({
+            browsers: ['last 2 versions'],
+            cascade: false
+        }))
         .pipe(sourcemaps.write('./maps'))
         .pipe(gulp.dest('./tmp/app/css'));
 }
