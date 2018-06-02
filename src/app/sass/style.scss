@@ -134,11 +134,8 @@ input {
 div.background-container {
 	height: 100%;
 	width: 100%;
-	background-image: url("../assets/images/backgrounds/sunshine_1920.jpg");
+	background: url("../assets/images/backgrounds/sunshine_1920.jpg") no-repeat center;
 	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
-	background-attachment: fixed;
 	position: fixed;
 	z-index: -1;
 	.overlay {
@@ -369,7 +366,6 @@ div.background-container {
 	}
 
 	.hourly-summaries {
-		min-height: 30vw;
 		position: relative;
 	}
 
