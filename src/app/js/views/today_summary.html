@@ -1,5 +1,4 @@
 <div class="main-summary">
-	<loader loader-class="summary-loader" loading="loadingDay"></loader>
 	<weather-summary
 		class="today-summary"
 		periods="[{'name':'now','value': 'Now'}]"
@@ -15,9 +14,7 @@
 		icon="currentWeather.icon"
 	></weather-summary>
 </div>
-<!--<span>{{forecastWeather.hour}}</span>-->
 <div class="hourly-summaries">
-	<loader loader-class="hours-loader" ng-show="loadingHours" loading="loadingHours"></loader>
 	<div ng-repeat="hr in todayForecast.hour" class="hourly-summary-container">
 		<weather-summary
 			class="hourly-summary"

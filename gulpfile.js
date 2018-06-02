@@ -4,10 +4,14 @@ const browserSync = require('browser-sync').create();
 const sourcemaps = require('gulp-sourcemaps');
 const install = require('gulp-install');
 const babel = require('gulp-babel');
+const babelMin = require('gulp-babel-minify');
 // const concat = require('gulp-concat');
 const autoprefixer = require('gulp-autoprefixer');
 const postCSS = require('gulp-postcss');
 
+const conf = {
+    env: 'dev'
+};
 
 const paths = {
     src: {
@@ -19,77 +23,77 @@ const paths = {
         ASSETS: './src/app/assets/**/*',
         NPM: './src/package.json'
     },
-    tmp: {
-        root: './tmp/',
-        Index: './tmp/index.html',
-        CSS: './tmp/app/css',
-        SASS: './tmp/app/sass/**/*.scss',
-        JS: './tmp/app/js/',
-        ASSETS: './tmp/app/assets',
-        NPMJson: './tmp/package.json',
-        NPMFiles: './tmp/node_modules/*'
+    dest: {
+        root: '',
+        Index: '/index.html',
+        CSS: '/app/css',
+        SASS: '/app/sass/**/*.scss',
+        JS: '/app/js/',
+        ASSETS: '/app/assets',
+        NPMJson: '/package.json',
+        NPMFiles: '/node_modules/*'
     },
-    dist: {
-        root: './dist/**/*',
-        Index: './dist/index.html',
-        CSS: './dist/**/*.css',
-        SASS: './dist/**/*.scss',
-        JS: './dist/**/*.js'
+    getDestPath: function(type) {
+        return `./${conf.env === 'dev' ? 'tmp' : 'dist'}${this.dest[type]}`;
     }
 };
 
-function copyHtmlToTmp() {
+function copyHtmlTo() {
     return gulp.src(paths.src.HTML)
-        .pipe(gulp.dest(paths.tmp.root));
+        .pipe(gulp.dest(`${paths.getDestPath('root')}`));
 }
-gulp.task('copyHtmlToTmp', copyHtmlToTmp);
+gulp.task('copyHtmlTo', copyHtmlTo);
 
-function copySassToTmp() {
+function copySassTo() {
     return gulp.src(paths.src.SASS)
-        .pipe(gulp.dest(paths.tmp.root));
+        .pipe(gulp.dest(`${paths.getDestPath('root')}`));
 }
-gulp.task('copySassToTmp',copySassToTmp);
+gulp.task('copySassTo',copySassTo);
 
-function copyJsToTmp() {
+function copyJsTo() {
     return gulp.src(paths.src.JS)
-        .pipe(gulp.dest(paths.tmp.JS));
+        .pipe(gulp.dest(`${paths.getDestPath('JS')}`));
 }
 
-gulp.task('copyJsToTmp',copyJsToTmp);
+gulp.task('copyJsTo',copyJsTo);
 
-function babelTranspileToTmp() {
+function babelTranspileTo() {
     return gulp.src(paths.src.JS)
-        .pipe(sourcemaps.init())
-        .pipe(babel({
-            presets: ['env']
-        }))
+        // .pipe(sourcemaps.init())
+        .pipe(
+            conf.env === 'dev' ?
+                babel({presets: ['env']}) :
+                babelMin({
+                    mangle: false
+                })
+        )
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest(paths.tmp.JS));
+        .pipe(gulp.dest(`${paths.getDestPath('JS')}`));
 }
 
-gulp.task('babelTranspileToTmp', babelTranspileToTmp);
+gulp.task('babelTranspileTo', babelTranspileTo);
 
-function copyAssetsToTmp() {
+function copyAssetsTo() {
     return gulp.src(paths.src.ASSETS)
-        .pipe(gulp.dest(paths.tmp.ASSETS));
+        .pipe(gulp.dest(`${paths.getDestPath('ASSETS')}`));
 }
-gulp.task('copyAssetsToTmp',copyAssetsToTmp);
+gulp.task('copyAssetsTo',copyAssetsTo);
 
 function copyPackageJson() {
-    return gulp.src(paths.src.NPM).pipe(gulp.dest(paths.tmp.root))
+    return gulp.src(paths.src.NPM).pipe(gulp.dest(`${paths.getDestPath('root')}`));
 }
 gulp.task('copyPackageJson',copyPackageJson);
 
-const copyToTmp = gulp.parallel(copyHtmlToTmp, babelTranspileToTmp, copySassToTmp, copyAssetsToTmp, copyPackageJson);
-gulp.task('copyToTmp', copyToTmp);
+const copyTo = gulp.parallel(copyHtmlTo, babelTranspileTo, copySassTo, copyAssetsTo, copyPackageJson);
+gulp.task('copyTo', copyTo);
 
-const npmInstallTmp = function() {
-    return gulp.src(paths.tmp.NPMJson).pipe(install());
+const npmInstall = function() {
+    return gulp.src(`${paths.getDestPath('NPMJson')}`).pipe(install());
 };
-gulp.task('npmInstallTmp', npmInstallTmp);
+gulp.task('npmInstall', npmInstall);
 
 function compileSassAndAutoPrefix() {
-    return gulp.src(paths.tmp.SASS)
+    return gulp.src(`${paths.getDestPath('SASS')}`)
         .pipe(sourcemaps.init())
         .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer({
@@ -97,15 +101,15 @@ function compileSassAndAutoPrefix() {
             cascade: false
         }))
         .pipe(sourcemaps.write('./maps'))
-        .pipe(gulp.dest('./tmp/app/css'));
+        .pipe(gulp.dest(`${paths.getDestPath('CSS')}`));
 }
 gulp.task('compileSassAndAutoPrefix', compileSassAndAutoPrefix);
 
 function watchSrc() {
-    gulp.watch(paths.src.HTML, copyHtmlToTmp);
-    gulp.watch(paths.src.SASS, copySassToTmp);
-    gulp.watch(paths.src.JS, copyJsToTmp);
-    gulp.watch(paths.src.ASSETS, copyAssetsToTmp);
+    gulp.watch(paths.src.HTML, copyHtmlTo);
+    gulp.watch(paths.src.SASS, copySassTo);
+    gulp.watch(paths.src.JS, copyJsTo);
+    gulp.watch(paths.src.ASSETS, copyAssetsTo);
     gulp.watch(paths.src.NPM, copyPackageJson);
 }
 gulp.task('watchSrc',watchSrc);
@@ -113,25 +117,31 @@ gulp.task('watchSrc',watchSrc);
 function watchTmp() {
     gulp.watch(['./tmp/**/*.js','./tmp/**/*.css','./tmp/**/*.html']).on('change', browserSync.reload);
     // gulp.watch('tmp/app/css/style.css',['autoprefixer']);
-    gulp.watch(paths.tmp.SASS, compileSassAndAutoPrefix);
-    gulp.watch(paths.tmp.NPMJson, npmInstallTmp)
+    gulp.watch(`${paths.getDestPath('SASS')}`, compileSassAndAutoPrefix);
+    gulp.watch(`${paths.getDestPath('NPMJson')}`, npmInstall)
 }
 gulp.task('watchTmp', watchTmp);
 
 function runBrowserSync() {
+    const basePath = paths.getDestPath('root');
     return browserSync.init({
         server: {
-            baseDir: "./tmp"
+            baseDir: basePath
         }
     });
 }
-gulp.task('browserSync', runBrowserSync);
+gulp.task('runBrowserSync', runBrowserSync);
 
 const watch = gulp.parallel(runBrowserSync, watchSrc, watchTmp);
 gulp.task('watch', watch);
 
-const build = gulp.series(copyToTmp, gulp.parallel(npmInstallTmp, compileSassAndAutoPrefix));
+const build = gulp.series(copyTo, gulp.parallel(npmInstall, compileSassAndAutoPrefix));
 gulp.task('build', build);
 
-const serve = gulp.series(build, watch);
-gulp.task('serve', serve);
+const serve = (env = 'dev') => {
+    conf.env = env;
+    console.log('conf.env', conf.env);
+    return gulp.series(build, watch);
+};
+gulp.task('serveDev', gulp.series(serve()));
+gulp.task('serveProd', gulp.series(serve('prod')));

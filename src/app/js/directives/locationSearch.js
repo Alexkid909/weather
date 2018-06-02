@@ -11,7 +11,6 @@ angular.module('Weather').directive('locationSearch', [
                 $scope.currentLocation = '';
                 $scope.inputFocus = false;
 
-
                 $scope.changeInputFocus = (value) => {
                     console.log(value);
                     $scope.inputFocus = value;

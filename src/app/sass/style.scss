@@ -113,7 +113,7 @@ input {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%,-50%);
-	border: 8px solid #f3f3f3; /* Light grey */
+	border: 8px solid rgb(220, 220, 220); /* Light grey */
 	border-top: 8px solid transparent;
 	border-radius: 50%;
 	width: 50px;
@@ -153,13 +153,35 @@ div.background-container {
 	margin: 0 auto;
 	width: 100%;
 	padding-top: 1rem;
+	position: relative;
+
+	&>loader {
+		.loader-container {
+			display: initial !important;
+			z-index: 10;
+			top: 0;
+			height: 100vh;
+			&.ng-hide {
+				transition: all linear 0.5s;
+				z-index: -1;
+				opacity: 0;
+			}
+		}
+	}
 
 	.main-container {
-		margin: 0 2rem;
+		margin: 0 2em;
 		overflow: hidden;
 		//grid-row-gap: 5px;
 		//grid-column-gap: 0.5rem;
 		//grid-template-rows: auto;
+		opacity: 1;
+		&.ng-hide {
+			opacity: 0;
+		}
+		&.ng-hide-remove {
+			transition: all 0.5s linear 0.5s;
+		}
 		form {
 			input {
 				&.text, &.submit {
@@ -358,6 +380,7 @@ div.background-container {
 		}
 	}
 }
+
 
 @media (max-aspect-ratio: 10/6) {
 	.daily-summaries-container {

@@ -9,7 +9,7 @@ angular.module('Weather').directive('loader', [
             templateUrl: 'app/js/directives/templates/loader.html',
             controller: function($scope) {
                 // $scope.$watch('loading', function(newValue) {
-                //     console.log('loading', newValue);
+                //     console.log('loader loading', newValue);
                 // });
                 // $scope.$watch('loaderClass', function(newValue) {
                 //     console.log('class', newValue);

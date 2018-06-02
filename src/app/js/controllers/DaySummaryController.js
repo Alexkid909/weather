@@ -5,10 +5,10 @@ angular.module('Weather')
 		'$scope',
 		'$routeParams',
 		function(weather, locationService, $scope,$routeParams) {
-            $scope.loadingDay = true;
-            $scope.loadingHours = true;
+            $scope.$emit('dayForecastLoading', {status: true});
+            $scope.$emit('hourForecastLoading', {status: true});
 			$scope.errors = [];
-			$scope.dayForecast = {};
+			$scope.dayForecast = {hour: {}};
             $scope.appendDaySuffix = function(dayNumber) {
                 if (dayNumber) {
                     const suffixes = ['st','nd','rd','th'];
@@ -19,29 +19,29 @@ angular.module('Weather')
 
 
 			function getForecast10Day(day) {
-                $scope.loadingDay = true;
-			    weather.getForecast10Day().then(success => {
-                    $scope.dayForecast = success.data.forecast.simpleforecast.forecastday[day];
-                    getHourlyForecastForDay($routeParams.id);
-                    $scope.loadingDay = false;
-                    $scope.loadingDay = false;
+                $scope.$emit('dayForecastLoading', {status: true});
+                weather.getForecast10Day().then(success => {
+
+                    $scope.dayForecast = success.data.forecast.simpleforecast.forecastday
+                        .filter(forecastday => forecastday.date.day == day)[0];
+                    getHourlyForecastForDay($routeParams.day);
+                    $scope.$emit('dayForecastLoading', {status:false});
                 },error => {
                     console.log(error);
                     Raven.captureException(error);
                 });
             }
-            getForecast10Day($routeParams.id);
+            getForecast10Day($routeParams.day);
 
 
 			function getHourlyForecastForDay(day) {
-                $scope.loadingHours = true;
+                $scope.$emit('hourForecastLoading', {status: true});
                 locationService.getCurrentLocation().then(success => {
-                    const currentDate = new Date();
-                    const localDate = new Date(currentDate.toLocaleString('en', {timeZone: success.tz}));
-                    const currentDay = new Date(localDate).getDate();
+
                     weather.getHourly10Day().then(success => {
-                        $scope.dayForecast.hour = success.data.hourly_forecast.filter(hour => hour.FCTTIME.mday == currentDay + parseInt(day));
-                        $scope.loadingHours = false;
+                        $scope.dayForecast.hour = success.data.hourly_forecast
+                            .filter(hour => (hour.FCTTIME.mday == day));
+                        $scope.$emit('hourForecastLoading', {status: false});
                     },error => {
                         console.log(error);
                         Raven.captureException(error);
@@ -52,11 +52,9 @@ angular.module('Weather')
                 });
             }
 
-
-
             $scope.$on('event: locationChange', function() {
                 console.log('updating DaySummaryController');
-                getForecast10Day($routeParams.id);
+                getForecast10Day($routeParams.day);
             });
 
 		}

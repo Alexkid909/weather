@@ -5,6 +5,7 @@
 		<link rel="stylesheet" type="text/css" href="app/css/style.css">
 		<link rel="stylesheet" href="./node_modules/font-awesome/css/font-awesome.min.css">
 		<script type="text/javascript" src="./node_modules/angular/angular.min.js"></script>
+		<script src="./node_modules/angular-animate/angular-animate.js"></script>
 		<script type="text/javascript" src="./node_modules/angular-route/angular-route.min.js"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script src="./node_modules/raven-js/dist/raven.js"></script>
@@ -21,14 +22,14 @@
 			<div class="overlay"></div>
 		</div>
 		<div class="main" ng-controller="MainController">
-			<div class="main-container">
+			<loader loading="loading"></loader>
+			<div ng-hide="loading" class="main-container">
 				<div class="search-container">
 					<location-search></location-search>
 				</div>
 				<div class="daily-summaries-container">
-					<loader loading="loadingForecast"></loader>
 					<div class="daily-summaries">
-						<a href="#/weather_day/{{$index}}/" ng-repeat="forecastDay in forecastWeather">
+						<a href="#/weather_day/{{forecastDay.date.day}}/" ng-repeat="forecastDay in forecastWeather">
 							<weather-summary
 									class="daily-summary"
 									periods="[{'name':'dayName', 'value': forecastDay.date.weekday_short}, {'name': 'dayWithSuffix', 'value':appendDaySuffix(forecastDay.date.day)}]"

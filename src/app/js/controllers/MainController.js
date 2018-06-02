@@ -3,14 +3,27 @@ angular.module('Weather').controller('MainController',[
 		'$scope',
 		'locationService',
 		function(weather,$scope, locationService) {
-			$scope.loadingForecast = true;
 			$scope.errors = [];
 			$scope.currentLocation = '';
 			$scope.weatherLocation;
 			$scope.forecastWeather;
-			$scope.localTimeString = function() {
+			$scope.loading = true;
+			$scope.daysForecastLoading = false;
+            $scope.dayForecastLoading = false;
+            $scope.hourForecastLoading = false;
+            $scope.$watchGroup(['daysForecastLoading', 'hourForecastLoading', 'dayForecastLoading'],(newValues) => {
+            	$scope.loading = newValues.some(value => value);
+            });
+            $scope.$on('dayForecastLoading', (event, args) => {
+                $scope.dayForecastLoading = args.status;
+			});
+            $scope.$on('hourForecastLoading', (event, args) => {
+                $scope.hourForecastLoading = args.status;
+			});
 
-			};
+
+
+
             $scope.appendDaySuffix = dayNumber => {
                 const suffixes = ['st','nd','rd','th'];
                 const suffix = dayNumber > 3 ? suffixes[3] : suffixes[dayNumber - 1];
@@ -31,10 +44,8 @@ angular.module('Weather').controller('MainController',[
                 });
             }
 			function getForecast10Day() {
-                $scope.loadingForecast = true;
 				weather.getForecast10Day().then(success => {
 					$scope.forecastWeather = success.data.forecast.simpleforecast.forecastday;
-					$scope.loadingForecast = false;
                 },error => {
 					$scope.errors = [];
 					$scope.errors.push(error);

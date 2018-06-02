@@ -1,5 +1,4 @@
 <div class="main-summary">
-	<loader loader-class="summary-loader" loading="loadingDay"></loader>
 	<weather-summary
 		class="forecast-summary"
 		periods="[{'name':'dayName', 'value': dayForecast.date.weekday_short}, {'name': 'dayWithSuffix', 'value': appendDaySuffix(dayForecast.date.day)}]"
@@ -15,7 +14,6 @@
 </div>
 
 <div class="hourly-summaries">
-	<loader loader-class="hours-loader" ng-show="loadingHours" loading="loadingHours"></loader>
 	<div ng-repeat="hr in dayForecast.hour" class="hourly-summary-container">
 		<weather-summary
 				class="hourly-summary"
