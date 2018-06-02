@@ -40,6 +40,7 @@
     "pump": "^3.0.0"
   },
   "dependencies": {
-    "cors-anywhere": "^0.4.1"
+    "cors-anywhere": "^0.4.1",
+    "gulp-print": "^5.0.0"
   }
 }

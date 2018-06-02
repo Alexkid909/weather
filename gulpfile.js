@@ -116,7 +116,6 @@ gulp.task('watchSrc',watchSrc);
 
 function watchTmp() {
     gulp.watch(['./tmp/**/*.js','./tmp/**/*.css','./tmp/**/*.html']).on('change', browserSync.reload);
-    // gulp.watch('tmp/app/css/style.css',['autoprefixer']);
     gulp.watch(`${paths.getDestPath('SASS')}`, compileSassAndAutoPrefix);
     gulp.watch(`${paths.getDestPath('NPMJson')}`, npmInstall)
 }
@@ -138,10 +137,26 @@ gulp.task('watch', watch);
 const build = gulp.series(copyTo, gulp.parallel(npmInstall, compileSassAndAutoPrefix));
 gulp.task('build', build);
 
-const serve = (env = 'dev') => {
-    conf.env = env;
-    console.log('conf.env', conf.env);
-    return gulp.series(build, watch);
+const serve = gulp.series(build, watch);
+gulp.task('serve', serve);
+
+const setProd = (done) => {
+    conf.env = 'prod';
+    console.log('serving prod', conf.env);
+    done();
 };
-gulp.task('serveDev', gulp.series(serve()));
-gulp.task('serveProd', gulp.series(serve('prod')));
+gulp.task('setProd', setProd);
+
+const setDev = (done) => {
+    conf.env = 'dev';
+    console.log('serving dev', conf.env);
+    done();
+};
+gulp.task('setDev', setDev);
+
+const serveDev = gulp.parallel(setDev, serve);
+const serveProd = gulp.parallel(setProd, serve);
+
+gulp.task('serveProd',serveProd);
+gulp.task('serveDev',serveDev);
+
