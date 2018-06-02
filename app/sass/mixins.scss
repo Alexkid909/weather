@@ -1,0 +1,133 @@
+@mixin vertical-summary {
+  .weather-summary-wrapper {
+
+    &>div {
+      grid-column: 1;
+    }
+
+    .period-container {
+      grid-row: 1/1;
+    }
+
+    .condition-container {
+      grid-row: 2/4;
+    }
+
+    .temp-container {
+      grid-row: 4/6;
+    }
+
+    .wind-container {
+      grid-row: 6/6;
+    }
+
+    font-size: 3em;
+    .temp-container, .wind-container {
+      font-size: 0.8em;
+    }
+    .wind-container {
+      text-align: center;
+    }
+  }
+
+  .high-temp-wrapper, .low-temp-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(auto, auto);
+    &>span {
+      grid-row: 1/1;
+      margin: auto 0;
+    }
+    .fa {
+      grid-column: 1/3;
+      //font-size: 0.4em;
+      vertical-align: middle;
+    }
+    .high-temp, .low-temp {
+      grid-column: 3/5;
+    }
+  }
+}
+
+@mixin horizontal-summary {
+  font-size: 3.5em;
+  .weather-summary-wrapper {
+    display: grid;
+    grid-template-columns: repeat(10,1fr);
+    grid-row-gap: 0;
+    padding: 0.5em 0.25em;
+    margin-bottom: 3.5px;
+    &>div {
+      margin: auto 0;
+      grid-row: 1;
+
+    }
+    .period-container {
+      grid-column: 1/4
+    }
+    .condition-container {
+      grid-column: 4/6;
+    }
+    .temp-container {
+      grid-column: 6/8;
+    }
+    .wind-container {
+      grid-column: 8/12;
+      grid-row-gap: 0;
+    }
+  }
+}
+
+@mixin tall-summary {
+
+}
+
+@mixin wide-summary {
+  margin-bottom: 0.5rem;
+  position: relative;
+  .loader-container {
+    background-color: transparent;
+  }
+  .weather-summary-wrapper {
+    height: 100%;
+    padding: 0;
+    .condition-container {
+      .condition-image-wrapper {
+        .wi {
+          font-size: 2em;
+          margin-bottom: 0.35em;
+          margin-top: 0.25em;
+        }
+      }
+    }
+    font-size: 5em;
+    .fa {
+      text-align: right;
+    }
+  }
+  .temp-container {
+    font-size: 2.5em;
+  }
+  .wind-container {
+    padding-right: 1rem;
+  }
+  .high-temp-wrapper, .low-temp-wrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(auto, auto);
+    &>span {
+      grid-row: 1/1;
+      margin: auto 0;
+    }
+    .fa {
+      grid-column: 1/3;
+      //font-size: 0.4em;
+      vertical-align: middle;
+    }
+    .high-temp, .low-temp {
+      grid-column: 3/5;
+    }
+  }
+
+
+}
