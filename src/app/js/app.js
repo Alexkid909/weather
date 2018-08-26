@@ -10,7 +10,7 @@ angular.module('Weather',['ngRoute', 'ngRaven', 'ngAnimate'])
 		templateUrl: 'app/js/views/day_summary.html'
 	})
 	.when('/',{
-		controller: 'TodaySummaryController',		
+		controller: 'TodaySummaryController',
 		templateUrl: 'app/js/views/today_summary.html'
 	})
 	.otherwise({

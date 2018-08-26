@@ -30,17 +30,20 @@
     "jasmine": "^2.7.0",
     "jasmine-promises": "^0.4.1",
     "jquery": "^3.2.1",
-    "karma": "^1.7.0",
+    "karma": "^1.7.1",
     "karma-babel-preprocessor": "^6.0.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.1",
-    "karma-jasmine": "^1.1.0",
+    "karma-jasmine": "^1.1.2",
     "karma-ng-html2js-preprocessor": "^1.0.0",
     "karma-phantomjs-launcher": "^1.0.4",
     "pump": "^3.0.0"
   },
   "dependencies": {
+    "angular": "^1.7.3",
+    "angular-mocks": "^1.7.3",
     "cors-anywhere": "^0.4.1",
-    "gulp-print": "^5.0.0"
+    "gulp-print": "^5.0.0",
+    "jasmine-core": "^3.2.1"
   }
 }

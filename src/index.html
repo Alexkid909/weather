@@ -4,18 +4,19 @@
 		<title>Weather App</title>
 		<link rel="stylesheet" type="text/css" href="app/css/style.css">
 		<link rel="stylesheet" href="./node_modules/font-awesome/css/font-awesome.min.css">
-		<script type="text/javascript" src="./node_modules/angular/angular.min.js"></script>
-		<script src="./node_modules/angular-animate/angular-animate.js"></script>
-		<script type="text/javascript" src="./node_modules/angular-route/angular-route.min.js"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<script src="./node_modules/angular/angular.min.js"></script>
+		<script src="./node_modules/angular-animate/angular-animate.js"></script>
+		<script src="./node_modules/angular-route/angular-route.min.js"></script>
 		<script src="./node_modules/raven-js/dist/raven.js"></script>
 		<script src="./node_modules/raven-js/dist/plugins/angular.js"></script>
-		<script>
-            Raven
-                .config('https://c932c5f0da49495f8738af3df8228270@sentry.io/1204051')
-                .addPlugin(Raven.Plugins.Angular)
-                .install();
-		</script>
+
+
+		<!--Sentry Config-->
+
+		<script src="./app/js/ravenConfig.js" ></script>
+
 	</head>
 	<body class="body" ng-app="Weather">
 		<div class="background-container">
@@ -50,7 +51,10 @@
 		</div>
 
 
-		<!-- Modules -->
+
+
+		<!--Modules-->
+
 		<script type="text/javascript" src="app/js/app.js"></script>
 
 		<!-- Controllers -->
