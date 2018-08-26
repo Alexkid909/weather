@@ -1,16 +1,34 @@
 describe('Location service', function() {
+
+    beforeEach(angular.mock.module('Weather'));
+
+    var $locationService;
+    var httpBackend;
+
+    beforeEach(inject(function($httpBackend, _locationService_) {
+        $locationService = _locationService_;
+        httpBackend = $httpBackend;
+    }));
+
+    // afterEach(function () {
+    //     httpBackend.verifyNoOutstandingExpectation();
+    //     httpBackend.verifyNoOutstandingRequest();
+    // });
+
     describe('Search method', function() {
 
-        beforeEach(angular.mock.module('Weather'));
+        it('should return a promise', function() {
+            var result = $locationService.search('London');
 
-        var $locationService;
+            var isPromise = false;
 
-        beforeEach(inject(function(_$locationService_) {
-            $locationService = _$locationService_;
-        }));
+            angular.isObject(result)
+            && result.then instanceof Function
+            && result["catch"] instanceof Function
+            && result["finally"] instanceof Function && (isPromise = true);
 
-        it('should return a string', function() {
-            expect(0).toEqual(0);
+            expect(isPromise).toBe(true);
+
         });
     });
 });
