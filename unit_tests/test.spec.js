@@ -10,11 +10,6 @@ describe('Location service', function() {
         httpBackend = $httpBackend;
     }));
 
-    // afterEach(function () {
-    //     httpBackend.verifyNoOutstandingExpectation();
-    //     httpBackend.verifyNoOutstandingRequest();
-    // });
-
     describe('Search method', function() {
 
         it('should return a promise', function() {

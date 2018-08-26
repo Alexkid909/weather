@@ -8,6 +8,8 @@ const babelMin = require('gulp-babel-minify');
 // const concat = require('gulp-concat');
 const autoprefixer = require('gulp-autoprefixer');
 const postCSS = require('gulp-postcss');
+const karma = require('gulp-karma-runner');
+const jasmine = require('gulp-jasmine');
 
 const conf = {
     env: 'dev'
@@ -159,4 +161,40 @@ const serveProd = gulp.parallel(setProd, serve);
 
 gulp.task('serveProd',serveProd);
 gulp.task('serveDev',serveDev);
+
+//Tests
+
+var KarmaServer = require('karma').Server;
+const browserSyncCoverage = require('browser-sync').create();
+
+
+const unitTests = function (done) {
+    new KarmaServer({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: false
+    }, done).start();
+};
+
+gulp.task('test', unitTests);
+
+function serveCoverage() {
+    const basePath = './coverage/Chrome 66.0.3359 (Linux 0.0.0)/';
+    return browserSyncCoverage.init({
+        server: {
+            baseDir: basePath,
+            port: 3002
+        }
+    });
+}
+
+gulp.task('serveCoverage', serveCoverage);
+
+function watchCoverage() {
+    gulp.watch(['./coverage/Chrome 66.0.3359 (Linux 0.0.0)/']).on('change', browserSyncCoverage.reload);
+}
+
+gulp.task('watchCoverage', watchCoverage);
+
+const coverage = gulp.parallel(serveCoverage, watchCoverage);
+gulp.task('coverage', coverage);
 
