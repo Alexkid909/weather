@@ -24,6 +24,7 @@ module.exports = function(config) {
         'tmp/app/js/app.js',
         'node_modules/angular-mocks/angular-mocks.js',
         'tmp/app/js/services/location.js',
+        'tmp/app/js/services/weather.js',
         'unit_tests/test.spec.js'
     ],
 
