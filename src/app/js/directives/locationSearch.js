@@ -30,7 +30,7 @@ angular.module('Weather').directive('locationSearch', [
                 function getCurrentLocation() {
                     locationService.getCurrentLocation().then(success => {
                         const locationData = success;
-                        $scope.currentLocation = `${locationData.name} - ${locationData.address}`;
+                        $scope.searchPlaceholder = $scope.currentLocation = `${locationData.name} - ${locationData.address}`;
                     },error => {
                         console.log(error);
                         Raven.captureException(error);

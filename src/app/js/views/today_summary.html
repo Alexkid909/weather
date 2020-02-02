@@ -11,20 +11,6 @@
 		icon-path=""
 		icon="currentWeather.icon"
 	></weather-summary>
-	<!--<weather-summary-->
-		<!--class="today-summary"-->
-		<!--periods="[{'name':'now','value': 'Now'}]"-->
-		<!--date="currentWeather.time"-->
-		<!--condition="currentWeather.summary"-->
-		<!--temp-current="currentWeather.temperature | number: 0"-->
-		<!--temp-high="forecastWeather.temperatureHigh"-->
-		<!--temp-low="forecastWeather.temperatureLow"-->
-		<!--wind-speed="currentWeather.windSpeed"-->
-		<!--wind-direction=""-->
-		<!--wind-degree="currentWeather.windBearing"-->
-		<!--icon-path=""-->
-		<!--icon="currentWeather.icon"-->
-	<!--&gt;</weather-summary>-->
 </div>
 <div class="hourly-summaries">
 	<div ng-repeat="hr in todayForecast.hours track by $index" class="hourly-summary-container">

@@ -47,8 +47,15 @@ angular.module('Weather').factory('locationService',[
             },
             getCurrentLocation: function() {
                 let localStorageLocation = JSON.parse(localStorage.getItem('currentLocation'));
+                let localStorageValid = true;
+                for (const key in localStorageLocation) {
+                    if (!localStorageLocation[key]) {
+                        localStorageValid = false;
+                        break;
+                    }
+                }
                 const deferred = $q.defer();
-                if (localStorageLocation) {
+                if (localStorageLocation && localStorageValid) {
                     deferred.resolve(localStorageLocation);
                 } else {
                     this.setCurrentLocation().then(() => {
