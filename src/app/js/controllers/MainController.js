@@ -21,41 +21,38 @@ angular.module('Weather').controller('MainController',[
                 $scope.hourForecastLoading = args.status;
 			});
 
-
-
-
             $scope.appendDaySuffix = dayNumber => {
                 const suffixes = ['st','nd','rd','th'];
                 const suffix = dayNumber > 3 ? suffixes[3] : suffixes[dayNumber - 1];
                 return dayNumber + suffix
             };
             function getCurrentLocation() {
-                locationService.getCurrentLocation().then(success => {
-                    locationService.geoLookup(success.l).then(success => {
-                    	const location = success.data.location;
-                    	$scope.currentLocation = `${location.city}, ${location.country === 'US' ? `${location.state} ` : `${location.country_name}`} `;
-                    },error => {
-                        console.log(error);
-                        Raven.captureException(error);
-                    });
+                locationService.getCurrentLocation().then(data => {
+                    const locationData = data;
+                    $scope.currentLocation = `${locationData.city}, ${locationData.country_code === 'US' ? `${locationData.region_code} ` : `${locationData.country_code}`} `;
                 },error => {
-                    console.log(error);
                     Raven.captureException(error);
                 });
             }
-			function getForecast10Day() {
-				weather.getForecast10Day().then(success => {
-					$scope.forecastWeather = success.data.forecast.simpleforecast.forecastday;
+			function getDailyWeather() {
+            	weather.getDailySevenDayForecasts().then(dailyForecasts => {
+                    $scope.forecastWeather = dailyForecasts.map((day) => {
+                        const dayNum = day.friendlyDate.getDate();
+                        day.periods = [{
+                            name: 'day',
+                            value: $scope.appendDaySuffix(dayNum)
+                        }];
+                        return day;
+                    });
                 },error => {
-					$scope.errors = [];
+                    $scope.errors = [];
 					$scope.errors.push(error);
 				});	
 			}
-			getForecast10Day();
+            getDailyWeather();
 			getCurrentLocation();
 			$scope.$on('event: locationChange', () => {
-				console.log('updating MainController');
-				getForecast10Day();
+                getDailyWeather();
 				getCurrentLocation();
             });
 		}

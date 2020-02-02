@@ -8,7 +8,8 @@ angular.module('Weather')
             $scope.$emit('dayForecastLoading', {status: true});
             $scope.$emit('hourForecastLoading', {status: true});
 			$scope.errors = [];
-			$scope.dayForecast = {hour: {}};
+			$scope.dayForecast = {hours: {}};
+
             $scope.appendDaySuffix = function(dayNumber) {
                 if (dayNumber) {
                     const suffixes = ['st','nd','rd','th'];
@@ -17,44 +18,52 @@ angular.module('Weather')
                 }
             };
 
-
-			function getForecast10Day(day) {
+			function getDailyForecast(day) {
                 $scope.$emit('dayForecastLoading', {status: true});
-                weather.getForecast10Day().then(success => {
-
-                    $scope.dayForecast = success.data.forecast.simpleforecast.forecastday
-                        .filter(forecastday => forecastday.date.day == day)[0];
-                    getHourlyForecastForDay($routeParams.day);
+                weather.getDailyForecast(day).then(data => {
+                    const dayNumber = data.friendlyDate.getDate();
+                    const periods = [
+                        {   name: 'dayName',
+                            value: moment(data.friendlyDate).format('ddd')
+                        },
+                        {
+                            name: 'dayWithSuffix',
+                            value: $scope.appendDaySuffix(dayNumber)
+                        }
+                    ];
+                    $scope.dayForecast = Object.assign({}, data, { periods });
+                    getHourlyForecastForDay($scope.day);
                     $scope.$emit('dayForecastLoading', {status:false});
                 },error => {
                     console.log(error);
                     Raven.captureException(error);
                 });
             }
-            getForecast10Day($routeParams.day);
-
 
 			function getHourlyForecastForDay(day) {
                 $scope.$emit('hourForecastLoading', {status: true});
-                locationService.getCurrentLocation().then(success => {
-
-                    weather.getHourly10Day().then(success => {
-                        $scope.dayForecast.hour = success.data.hourly_forecast
-                            .filter(hour => (hour.FCTTIME.mday == day));
-                        $scope.$emit('hourForecastLoading', {status: false});
-                    },error => {
-                        console.log(error);
-                        Raven.captureException(error);
+                weather.getHourlyForecast(day).then(data => {
+                    $scope.dayForecast.hours = data.map((hour) => {
+                        const hourNum = hour.friendlyDate.getHours();
+                        const periods = [{
+                            name: 'hour',
+                            value: `${hourNum}${hourNum > 11 ? 'pm' : 'am'}`
+                        }];
+                        return Object.assign({}, hour, { periods });
                     });
+                    $scope.$emit('hourForecastLoading', {status: false});
                 },error => {
                     console.log(error);
                     Raven.captureException(error);
-                });
+                })
             }
 
+            $scope.day = parseInt($routeParams.day, 10);
+
+            getDailyForecast($scope.day);
+
             $scope.$on('event: locationChange', function() {
-                console.log('updating DaySummaryController');
-                getForecast10Day($routeParams.day);
+                getDailyForecast($routeParams.day);
             });
 
 		}

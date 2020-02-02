@@ -12,6 +12,12 @@
     </form>
     <ul class="search-results" ng-class="{'active' : searchTerm.length > 0}">
         <loader loading="loadingSearchResults"></loader>
-        <li ng-if="searchResults.length > 0" class="search-result" ng-repeat="location in searchResults" ng-click="selectLocation(location)">{{location.name}}</li>
+        <li
+            ng-if="searchResults.length > 0"
+            class="search-result" ng-repeat="location in searchResults"
+            ng-click="selectLocation(location)">
+            <div class="search-result-name">{{location.name}}</div>
+            <div class="search-result-address">{{location.address}}</div>
+        </li>
     </ul>
 </div>

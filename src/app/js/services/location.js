@@ -1,68 +1,83 @@
+class Location {
+    constructor(name, address, latitude, longitude) {
+        this.name = name;
+        this.address = address;
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+}
+
+
 angular.module('Weather').factory('locationService',[
     '$http',
     '$q',
     '$rootScope',
-    function($http,$q, $rootScope) {
-        const corsProxyUrl = 'https://cors-anywhere.herokuapp.com/';
-        const baseUrl = 'http://api.wunderground.com/api';
-        const key = '86f57048d0dd410f';
-        const responseFormat = '.json';
+    'ipLocationService',
+    function($http,$q, $rootScope, ipLocationService) {
+        const corsProxyUrl = 'https://cors-anywhere.herokuapp.com';
+        const baseUrl = 'https://api.locationiq.com/v1/autocomplete.php';
+        const id = 'c9c95ec6';
+        const key = '9cace23442d537';
+        // const responseFormat = '.json';
         const getCall = function(url) {
-            const deferred = $q.defer();
-            $http.get(url, {
+            const options = {
                 cache: true
-            }).then(function(success) {
-                    deferred.resolve(success);
-                },function(error) {
-                    deferred.reject(error);
-                });
-            return deferred.promise
+            };
+            return $http.get(url, options);
         };
         const service = {
             search: function(term) {
-                let baseUrl = 'http://autocomplete.wunderground.com/aq?query=';
-                let url = `${corsProxyUrl}${baseUrl}${term}`;
-                return getCall(url);
+                let url = `${corsProxyUrl}/${baseUrl}?key=${key}&q=${term}`;
+                return getCall(url).then((response) => {
+                    const data = response.data.map((location) => {
+                        const nameParts = location.display_name.split(',');
+                        const name = nameParts.shift();
+                        const address = nameParts.slice().join(',');
+                        return new Location(name, address, location.lat, location.lon)
+                    });
+                    return { data };
+                });
             },
-            geoLookup: function (locationQueryString) {
-                const resource = 'geolookup';
-                let urlArray = [baseUrl, key, resource];
-                if (!locationQueryString) {
-                    urlArray.push('q/autoip');
-                } else {
-                    urlArray.push(locationQueryString);
-                }
-                const url = `${urlArray.join('/')}${responseFormat}`;
-                return getCall(url);
+            geoLookup: function () {
+                return ipLocationService.lookup().then(success => {
+                    const data = success.data;
+                    const location = new Location(data.city, `${data.region_name}, ${data.zip}, ${data.country_name}`, data.latitude, data.longitude);
+                    return location;
+                });
             },
             getCurrentLocation: function() {
-                const localStorageLocation = JSON.parse(localStorage.getItem('currentLocation'));
+                let localStorageLocation = JSON.parse(localStorage.getItem('currentLocation'));
                 const deferred = $q.defer();
                 if (localStorageLocation) {
                     deferred.resolve(localStorageLocation);
                 } else {
-                    this.setCurrentLocation();
-                    deferred.resolve(this.geoLookup().then(success => success.data.location));
+                    this.setCurrentLocation().then(() => {
+                        localStorageLocation = JSON.parse(localStorage.getItem('currentLocation'));
+                        deferred.resolve(localStorageLocation);
+                    });
                 }
                 return deferred.promise;
             },
             setCurrentLocation: function(locationObj) {
+                const deferred = $q.defer();
                 if(!locationObj) {
                     this.geoLookup().then(success => {
-                        if(success.data.hasOwnProperty('location')) {
-                            localStorage.setItem('currentLocation', JSON.stringify(success.data.location));
-                            console.log(localStorage.getItem('currentLocation'));
+                        if(success) {
+                            localStorage.setItem('currentLocation', JSON.stringify(success));
                         } else {
                             const error = new Error('autoIp lookup failed');
                             console.log(error);
                             Raven.captureException(error);
                         }
-                        $rootScope.$broadcast('event: locationChange')
+                        $rootScope.$broadcast('event: locationChange');
+                        deferred.resolve('location set');
                     });
                 } else {
                     localStorage.setItem('currentLocation', JSON.stringify(locationObj));
                     $rootScope.$broadcast('event: locationChange');
+                    deferred.resolve('location set');
                 }
+                return deferred.promise;
             }
 
         };

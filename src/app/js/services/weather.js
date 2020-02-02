@@ -3,13 +3,19 @@ angular.module('Weather').factory('weather',[
 	'$q',
 	'locationService',
 	function WeatherFactory($http,$q, locationService) {
-		var baseUrl = 'http://api.wunderground.com/api';
-		var key = '86f57048d0dd410f';
+        const corsProxyUrl = 'https://cors-anywhere.herokuapp.com';
+        var baseUrl = `${corsProxyUrl}/https://api.darksky.net`;
+		const resource = 'forecast';
+		var key = '56d450beaee753c38ea506a0bcaa647e';
 		// var currentLocation = locationService.getCurrentLocation();
 		var responseFormat = '.json';
 		var getCall = function(url) {
             var deferred = $q.defer();
-            $http.get(url)
+            const options = {
+                cache: true,
+                params: { units: 'uk2' }
+            };
+            $http.get(url, options)
                 .then(function(success) {
                     deferred.resolve(success);
                 },function(error) {
@@ -17,39 +23,59 @@ angular.module('Weather').factory('weather',[
                 });
             return deferred.promise
 		};
+		var getFriendlyDate = function(epocDate, localeOptions) {
+            return new Date(new Date(epocDate * 1000).toLocaleString('en', localeOptions));
+        };
 		var service = {
-			getHourly10Day: function() {
-                const resource = 'hourly10day';
-                return locationService.getCurrentLocation().then(success => {
-                    const locationQueryString = success.l;
-                    const url = `${[baseUrl, key, resource].join('/')}${locationQueryString}${responseFormat}`;
-                    return getCall(url);
-                });
-			},
-            getHourlyToday: function() {
-                const resource = 'hourly';
-                return locationService.getCurrentLocation().then(success => {
-                    const locationQueryString = success.l;
-                    const url = `${[baseUrl, key, resource].join('/')}${locationQueryString}${responseFormat}`;
-                    return getCall(url);
-                });
-            },
-			getForecast10Day: function() {
-                const resource = 'forecast10day';
-                return locationService.getCurrentLocation().then(success => {
-                    const locationQueryString = success.l;
-                    const url = `${[baseUrl, key, resource].join('/')}${locationQueryString}${responseFormat}`;
-                    return getCall(url);
+            getWeather: function() {
+                return locationService.getCurrentLocation().then(locationData => {
+                    const url = `${[baseUrl, resource, key].join('/')}/${locationData.latitude},${locationData.longitude}?extend=hourly`;
+                    return getCall(url).then((response) => {
+                        this.localeOptions = { timeZone: response.data.timezone };
+                        return response;
+                    });
                 });
 			},
 			getCurrentWeather: function() {
-                const resource = 'conditions';
-                return locationService.getCurrentLocation().then(success => {
-                    const locationQueryString = success.l;
-                    const url = `${[baseUrl, key, resource].join('/')}${locationQueryString}${responseFormat}`;
-                    return getCall(url);
+                return this.getWeather().then((response) => {
+                    return response.data.currently;
                 });
-			}
+            },
+            getDailySevenDayForecasts() {
+                return this.getWeather().then((response) => {
+                  return response.data.daily.data.map(dailyData => {
+                      const friendlyDate = getFriendlyDate(dailyData.time, this.localeOptions);
+                      return Object.assign({}, dailyData, { friendlyDate });
+                  });
+                })
+            },
+			getDailyForecast(dayOffset = 0) {
+                return this.getDailySevenDayForecasts().then((response) => {
+                    const dayForecast = response[dayOffset];
+                    const friendlyDate = getFriendlyDate(dayForecast.time, this.localeOptions);
+                    return Object.assign({}, dayForecast, { friendlyDate });
+                });
+            },
+            getHourlyForecast(dayOffset = 0) {
+                return this.getWeather().then((response) => {
+                    const hourlyForecasts = response.data.hourly.data;
+                    const currentDate = new Date(response.data.currently.time * 1000);
+                    const localDate = new Date(currentDate.toLocaleString('en', this.localeOptions));
+                    const MDay = moment(localDate).add(dayOffset, 'days').date();
+                    const currentHour = dayOffset <= 0 ? localDate.getHours() : 0;
+
+                    return hourlyForecasts.filter(hour => {
+                        const hourDate = new Date(hour.time * 1000);
+                        const hourLocalDate = new Date(hourDate.toLocaleString('en', this.localeOptions));
+                        const forecastHourMDay = hourLocalDate.getDate();
+                        const forecastHour = hourLocalDate.getHours();
+                        return forecastHourMDay == MDay && forecastHour >= currentHour;
+                    }).map((hour) => {
+                        const friendlyDate = getFriendlyDate(hour.time, this.localeOptions);
+                        return Object.assign({}, hour, { friendlyDate });
+                    })
+                });
+            }
 		};
 		return service;
 	}

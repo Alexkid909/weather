@@ -18,7 +18,6 @@ angular.module('Weather').directive('locationSearch', [
 
                 $scope.$watch('inputFocus', (newValue) => {
                     $scope.searchPlaceholder = !newValue ? $scope.currentLocation : 'Enter a location';
-                    console.log($scope.searchPlaceholder);
                 });
 
                 function resetSearchField() {
@@ -30,13 +29,8 @@ angular.module('Weather').directive('locationSearch', [
 
                 function getCurrentLocation() {
                     locationService.getCurrentLocation().then(success => {
-                        locationService.geoLookup(success.l).then(success => {
-                            const location = success.data.location;
-                            $scope.searchPlaceholder = $scope.currentLocation = `${location.city}, ${location.country === 'US' ? `${location.state} ` : `${location.country_name}`} `;
-                        },error => {
-                            console.log(error);
-                            Raven.captureException(error);
-                        });
+                        const locationData = success;
+                        $scope.currentLocation = `${locationData.name} - ${locationData.address}`;
                     },error => {
                         console.log(error);
                         Raven.captureException(error);
@@ -45,26 +39,31 @@ angular.module('Weather').directive('locationSearch', [
                 getCurrentLocation();
                 resetSearchField();
                 resetSearchResults();
+
                 $scope.$watch('searchTerm',function (newValue, oldValue) {
                     if (!newValue) {
                         resetSearchResults()
-                    } else if (newValue !== oldValue) {
+                    } else if (newValue !== oldValue && newValue.length >= 2) {
+                        resetSearchResults();
                         $scope.loadingSearchResults = true;
-                        locationService.search(newValue)
-                            .then(function(success) {
-                                $scope.searchResults = success.data.RESULTS.slice(0,5);
-                                $scope.loadingSearchResults = false;
-                            },function(error) {
-                                console.log(error);
-                            });
+                        clearTimeout($scope.search);
+                        $scope.search = setTimeout(() => {
+                            locationService.search($scope.searchTerm)
+                                .then(function(success) {
+                                    $scope.searchResults = success.data;
+                                    $scope.loadingSearchResults = false;
+                                },function(error) {
+                                    console.log(error);
+                                });
+                        }, 500);
                     }
                 });
                 $scope.selectLocation = function(location) {
+                    $scope.searchPlaceholder = `${location.name} - ${location.address}`;
                     locationService.setCurrentLocation(location);
                     resetSearchResults();
                     resetSearchField();
-                }
-
+                };
             }
         }
     }
