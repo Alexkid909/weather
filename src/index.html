@@ -24,29 +24,31 @@
 			<div class="overlay"></div>
 		</div>
 		<div class="main" ng-controller="MainController">
+			<splash ng-hide="currentLocation || loading"></splash>
 			<loader loading="loading"></loader>
+			<div ng-hide="loading" class="search-container">
+				<location-search></location-search>
+			</div>
 			<div ng-hide="loading" class="main-container">
-				<div class="search-container">
-					<location-search></location-search>
-				</div>
-				<div class="daily-summaries-container">
-					<div class="daily-summaries">
-						<a href="#/weather_day/{{$index}}/" ng-repeat="forecastDay in forecastWeather">
-							<weather-summary
-									class="daily-summary"
-									periods="forecastDay.periods"
-									wind-speed="forecastDay.windGust"
-									wind-degree="forecastDay.windBearing"
-									icon="forecastDay.icon"
-									temp-high="forecastDay.temperatureHigh"
-									temp-low="forecastDay.temperatureLow"
-									date="forecastDay.date"
-							></weather-summary>
-						</a>
+				<div ng-show="currentLocation" class="summary-container">
+					<div class="daily-summaries-container">
+						<div class="daily-summaries">
+							<a href="#/weather_day/{{$index}}/" ng-repeat="forecastDay in forecastWeather">
+								<weather-summary
+										class="daily-summary"
+										periods="forecastDay.periods"
+										wind-speed="forecastDay.windGust"
+										wind-degree="forecastDay.windBearing"
+										icon="forecastDay.icon"
+										temp-high="forecastDay.temperatureHigh"
+										temp-low="forecastDay.temperatureLow"
+										date="forecastDay.date"
+								></weather-summary>
+							</a>
+						</div>
 					</div>
+					<div class="view" ng-view></div>
 				</div>
-
-				<div class="view" ng-view></div>
 			</div>
 		</div>
 
@@ -72,6 +74,7 @@
 		<script type="text/javascript" src="app/js/directives/weatherSummary.js"></script>
 		<script type="text/javascript" src="app/js/directives/locationSearch.js"></script>
 		<script type="text/javascript" src="app/js/directives/loader.js"></script>
+		<script type="text/javascript" src="app/js/directives/splash.js"></script>
 		<!-- Filters -->
 
 	<!-- 	<script src="js/filters/isBetweenDateTimes.js"></script> -->

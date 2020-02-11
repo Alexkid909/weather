@@ -18,6 +18,8 @@ angular.module('Weather')
                         $scope.currentWeather = data[0];
                         $scope.forecastWeather = data[1];
                         $scope.$emit('dayForecastLoading', {status: false});
+                    }, error => {
+                        $scope.$broadcast('event: error', error);
                     });
 
                 weather.getHourlyForecast(0).then((data) => {
@@ -28,6 +30,8 @@ angular.module('Weather')
                             value: `${hourNum}${hourNum > 11 ? 'pm' : 'am'}`
                         }];
                         return hour;
+                    }, error => {
+                        $scope.$broadcast('event: error', error);
                     });
                     $scope.$emit('hourForecastLoading', {status: false});
                 });

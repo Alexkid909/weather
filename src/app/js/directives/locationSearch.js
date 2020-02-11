@@ -8,7 +8,6 @@ angular.module('Weather').directive('locationSearch', [
                 $scope.loadingSearchResults = false;
                 $scope.searchResults = [];
                 $scope.searchPlaceholder = '';
-                $scope.currentLocation = '';
                 $scope.inputFocus = false;
 
                 $scope.changeInputFocus = (value) => {
@@ -17,7 +16,7 @@ angular.module('Weather').directive('locationSearch', [
                 };
 
                 $scope.$watch('inputFocus', (newValue) => {
-                    $scope.searchPlaceholder = !newValue ? $scope.currentLocation : 'Enter a location';
+                    $scope.searchPlaceholder = newValue ? 'Enter a location' : $scope.currentLocation || 'Search for a location';
                 });
 
                 function resetSearchField() {
@@ -32,8 +31,7 @@ angular.module('Weather').directive('locationSearch', [
                         const locationData = success;
                         $scope.searchPlaceholder = $scope.currentLocation = `${locationData.name} - ${locationData.address}`;
                     },error => {
-                        console.log(error);
-                        Raven.captureException(error);
+                        $scope.$broadcast('event: locationUnknown', error);
                     });
                 }
                 getCurrentLocation();

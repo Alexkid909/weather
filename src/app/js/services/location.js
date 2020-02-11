@@ -40,6 +40,7 @@ angular.module('Weather').factory('locationService',[
             },
             geoLookup: function () {
                 return ipLocationService.lookup().then(success => {
+                    console.log('iplookup', success);
                     const data = success.data;
                     const location = new Location(data.city, `${data.region_name}, ${data.zip}, ${data.country_name}`, data.latitude, data.longitude);
                     return location;
@@ -47,20 +48,15 @@ angular.module('Weather').factory('locationService',[
             },
             getCurrentLocation: function() {
                 let localStorageLocation = JSON.parse(localStorage.getItem('currentLocation'));
-                let localStorageValid = true;
-                for (const key in localStorageLocation) {
-                    if (!localStorageLocation[key]) {
-                        localStorageValid = false;
-                        break;
-                    }
-                }
                 const deferred = $q.defer();
-                if (localStorageLocation && localStorageValid) {
+                if (localStorageLocation) {
                     deferred.resolve(localStorageLocation);
                 } else {
                     this.setCurrentLocation().then(() => {
                         localStorageLocation = JSON.parse(localStorage.getItem('currentLocation'));
                         deferred.resolve(localStorageLocation);
+                    }, error => {
+                        deferred.reject(error);
                     });
                 }
                 return deferred.promise;
@@ -73,11 +69,12 @@ angular.module('Weather').factory('locationService',[
                             localStorage.setItem('currentLocation', JSON.stringify(success));
                         } else {
                             const error = new Error('autoIp lookup failed');
-                            console.log(error);
-                            Raven.captureException(error);
+                            deferred.reject(error);
                         }
                         $rootScope.$broadcast('event: locationChange');
                         deferred.resolve('location set');
+                    }, error => {
+                        deferred.reject(error);
                     });
                 } else {
                     localStorage.setItem('currentLocation', JSON.stringify(locationObj));

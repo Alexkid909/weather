@@ -4,7 +4,7 @@ angular.module('Weather').controller('MainController',[
 		'locationService',
 		function(weather,$scope, locationService) {
 			$scope.errors = [];
-			$scope.currentLocation = '';
+			$scope.currentLocation = null;
 			$scope.weatherLocation;
 			$scope.forecastWeather;
 			$scope.loading = true;
@@ -14,12 +14,21 @@ angular.module('Weather').controller('MainController',[
             $scope.$watchGroup(['daysForecastLoading', 'hourForecastLoading', 'dayForecastLoading'],(newValues) => {
             	$scope.loading = newValues.some(value => value);
             });
+
+            $scope.$watch('currentLocation', (newValue) => {
+                console.log('currentLocation', newValue);
+            });
+
             $scope.$on('dayForecastLoading', (event, args) => {
                 $scope.dayForecastLoading = args.status;
 			});
             $scope.$on('hourForecastLoading', (event, args) => {
                 $scope.hourForecastLoading = args.status;
 			});
+
+            $scope.$on('event: locationUnknown', () => {
+                $scope.loading = false;
+            });
 
             $scope.appendDaySuffix = dayNumber => {
                 const suffixes = ['st','nd','rd','th'];
@@ -32,6 +41,7 @@ angular.module('Weather').controller('MainController',[
                     $scope.currentLocation = `${locationData.city}, ${locationData.country_code === 'US' ? `${locationData.region_code} ` : `${locationData.country_code}`} `;
                 },error => {
                     Raven.captureException(error);
+                    $scope.$broadcast('event: error', error);
                 });
             }
 			function getDailyWeather() {
@@ -47,13 +57,15 @@ angular.module('Weather').controller('MainController',[
                 },error => {
                     $scope.errors = [];
 					$scope.errors.push(error);
-				});	
+                    $scope.$broadcast('event: error', error);
+                });
 			}
             getDailyWeather();
 			getCurrentLocation();
 			$scope.$on('event: locationChange', () => {
                 getDailyWeather();
 				getCurrentLocation();
+                $scope.loading = false;
             });
 		}
 	]);

@@ -88,12 +88,15 @@ input {
 	}
 
 	form.search-form {
+		display: flex;
+
 		input.search-input {
 			font-family: inherit;
 			font-size: 0.9em;
 			border: none;
-			padding: 0.5rem 0.25rem 1rem 0.25rem;
+			padding: 1rem;
 			width: 100%;
+
 			&:not(:focus) {
 				background-color: rgba(100,100,100, 0.25);
 				color: white;
@@ -157,8 +160,24 @@ div.background-container {
 .main {
 	margin: 0 auto;
 	width: 100%;
-	padding-top: 1rem;
 	position: relative;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	.splash {
+		position: fixed;
+		width: 80vmin;
+		height: 30vmin;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: rgba(255,255,255,0.2);
+		font-size: 20px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 
 	&>loader {
 		.loader-container {
@@ -174,13 +193,16 @@ div.background-container {
 		}
 	}
 
-	.main-container {
+	.main-container, .search-container {
 		margin: 0 2em;
-		overflow: hidden;
-		//grid-row-gap: 5px;
-		//grid-column-gap: 0.5rem;
-		//grid-template-rows: auto;
+	}
+
+	.main-container {
+		overflow: auto;
 		opacity: 1;
+		padding-top: 1rem;
+		position: relative;
+
 		&.ng-hide {
 			opacity: 0;
 		}

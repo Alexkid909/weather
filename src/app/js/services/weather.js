@@ -7,8 +7,6 @@ angular.module('Weather').factory('weather',[
         var baseUrl = `${corsProxyUrl}/https://api.darksky.net`;
 		const resource = 'forecast';
 		var key = '56d450beaee753c38ea506a0bcaa647e';
-		// var currentLocation = locationService.getCurrentLocation();
-		var responseFormat = '.json';
 		var getCall = function(url) {
             var deferred = $q.defer();
             const options = {
@@ -34,11 +32,15 @@ angular.module('Weather').factory('weather',[
                         this.localeOptions = { timeZone: response.data.timezone };
                         return response;
                     });
+                }, error => {
+                    throw error;
                 });
 			},
 			getCurrentWeather: function() {
                 return this.getWeather().then((response) => {
                     return response.data.currently;
+                }, error => {
+                    throw error;
                 });
             },
             getDailySevenDayForecasts() {
@@ -47,6 +49,8 @@ angular.module('Weather').factory('weather',[
                       const friendlyDate = getFriendlyDate(dailyData.time, this.localeOptions);
                       return Object.assign({}, dailyData, { friendlyDate });
                   });
+                }, error => {
+                    throw error;
                 })
             },
 			getDailyForecast(dayOffset = 0) {
@@ -54,6 +58,8 @@ angular.module('Weather').factory('weather',[
                     const dayForecast = response[dayOffset];
                     const friendlyDate = getFriendlyDate(dayForecast.time, this.localeOptions);
                     return Object.assign({}, dayForecast, { friendlyDate });
+                }, error => {
+                    throw error;
                 });
             },
             getHourlyForecast(dayOffset = 0) {
@@ -74,6 +80,10 @@ angular.module('Weather').factory('weather',[
                         const friendlyDate = getFriendlyDate(hour.time, this.localeOptions);
                         return Object.assign({}, hour, { friendlyDate });
                     })
+                }, error => {
+                    throw error;
+                }).catch((error) => {
+                    console.log(error);
                 });
             }
 		};

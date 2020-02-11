@@ -35,8 +35,7 @@ angular.module('Weather')
                     getHourlyForecastForDay($scope.day);
                     $scope.$emit('dayForecastLoading', {status:false});
                 },error => {
-                    console.log(error);
-                    Raven.captureException(error);
+                    $scope.$broadcast('event: error', error);
                 });
             }
 
@@ -53,8 +52,7 @@ angular.module('Weather')
                     });
                     $scope.$emit('hourForecastLoading', {status: false});
                 },error => {
-                    console.log(error);
-                    Raven.captureException(error);
+                    $scope.$broadcast('event: error', error);
                 })
             }
 

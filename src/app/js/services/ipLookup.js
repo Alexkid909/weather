@@ -11,9 +11,11 @@ angular.module('Weather').factory('ipLocationService',[
             $http.get(url, {
                 cache: true
             }).then(function(success) {
-                deferred.resolve(success);
-            },function(error) {
-                deferred.reject(error);
+                if (!success.data.type) {
+                    deferred.reject(new Error('unknown ip address'));
+                } else {
+                    deferred.resolve(success);
+                }
             });
             return deferred.promise
         };
